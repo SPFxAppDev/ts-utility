@@ -1,0 +1,32 @@
+{
+  "name": "@spfxappdev/utility",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepublish": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SPFxAppDev/ts-utility.git"
+  },
+  "keywords": [
+    "typescript",
+    "spfx",
+    "utility",
+    "typescript utility functions"
+  ],
+  "author": "Seryoga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SPFxAppDev/ts-utility/issues"
+  },
+  "homepage": "https://github.com/SPFxAppDev/ts-utility#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
