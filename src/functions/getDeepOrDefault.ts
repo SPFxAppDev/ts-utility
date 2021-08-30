@@ -7,7 +7,7 @@ import { default as isset } from './isset';
  * @param {any} defaultValue The defaultValue if property not exist.
  * @returns {any} If the Property is set, than the requested property otherwise defaultValue.
  */
-export default function getDeepOrDefault(objectToCheck: any, keyNameSpace: string, defaultValue: any = null): any {
+export default function getDeepOrDefault<TResult>(objectToCheck: any, keyNameSpace: string, defaultValue: TResult = null): any {
     if (!isset(objectToCheck)) {
         return defaultValue;
     }
@@ -25,5 +25,5 @@ export default function getDeepOrDefault(objectToCheck: any, keyNameSpace: strin
         currentObjectPath = currentObjectPath[currentKey];
     }
 
-    return currentObjectPath;
+    return currentObjectPath as TResult;
 }
