@@ -2,7 +2,7 @@ import { default as isset } from './isset';
 import { default as isNullOrEmpty } from './isNullOrEmpty';
 
 /**
- * A utility function for conditionally joining classNames together.
+ * A utility function for class names classNames together.
  * @example cssClasses('spfx-app-dev', 'theme'); // => 'spfx-app-dev theme'
  * @example cssClasses('spfx-app-dev', { theme: false });  // => 'spfx-app-dev'
  * @example cssClasses({ 'spfx-app-dev': true });  // => 'spfx-app-dev'

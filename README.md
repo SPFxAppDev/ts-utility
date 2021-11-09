@@ -118,7 +118,7 @@ Get's the Value of a specific Url-Parameter
 
 #### cssClasses
 
-A utility function for conditionally joining classNames together.
+A utility function for class names classNames together.
 
 ##### Examples
 
@@ -132,6 +132,17 @@ A utility function for conditionally joining classNames together.
  cssClasses('spfx-app-dev', { theme: true, active: false }, 'item');  // => 'spfx-app-dev theme item'
  cssClasses(null, false, 'spfx-app-dev', undefined, 0, 1, { theme: null }, '');  // => 'spfx-app-dev'
  const arr = ['theme', { active: true, item: false }]; cssClasses('spfx-app-dev', arr);  // => 'spfx-app-dev theme active'
+```
+
+#### asyncFn
+
+A wrapper function to handle a await function and their results/errors
+
+##### Examples
+
+TBD
+```typescript
+ 
 ```
 
 ## String-Extensions

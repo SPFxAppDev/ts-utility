@@ -1,6 +1,14 @@
 export type AsyncResult<TResult, TError> = [TResult|null, TError|null];
 
-export const asyncFn = async <TResult, TError>(promiseFn: Promise<TResult>): Promise<AsyncResult<TResult, TError>> => {
+/**
+ * A wrapper function to handle a await function and their results/errors
+ *
+ * @template TResult Type of expected result
+ * @template TError Type of expected error
+ * @param {Promise<TResult>} The asynchronous function to wait for
+ * @return {*}  {Promise<AsyncResult<TResult, TError>>}
+ */
+const asyncFn = async <TResult, TError>(promiseFn: Promise<TResult>): Promise<AsyncResult<TResult, TError>> => {
     try {
         const r: TResult = await promiseFn;
         return [r, null];
