@@ -15,10 +15,11 @@ declare global {
         /**
          * Returns the first element of a sequence, or <c>null</c> if no element is found.
          * @param predicateFunc A function to test each element for a condition.
+         * @param defaultValue A default value that will be returned if the element is not found. If this parameter is not specified, null is returned.
          * @example items.FirstOrDefault((item) => item.name === "SPFx-App.dev";);
          * @returns <c>null</c> if <c>Array<T></c> is empty or if no element passes the test specified by predicate; otherwise, the first element in source <c>Array<T></c> that passes the test specified by predicate.
          */
-        FirstOrDefault(predicateFunc: (item: T) => boolean): T|null;
+        FirstOrDefault(predicateFunc: (item: T) => boolean, defaultValue?: T|null): T|null;
 
         /**
          * Returns the first index of element of a sequence, or <c>-1</c> if no element is found.
@@ -70,158 +71,174 @@ declare global {
     }
 }
 
-Array.prototype.Contains = function<T>(this: T[], item: any, arrayProperty?: string, itemProperty?: string, useArrayPropertyForBoth: boolean = false): boolean {
-    const arr: T[] = this;
-    let itemProp: string = itemProperty;
-
-    if (useArrayPropertyForBoth && typeof itemProperty !== typeof 'a string') {
-        itemProp = arrayProperty;
-    }
-
-    for (let i: number = 0; i < arr.length; i++) {
-        const currentItem: any = arr[i];
-
-        if (!isNullOrEmpty(arrayProperty) && currentItem === item) {
-            return true;
+Object.defineProperty(Array.prototype, 'Contains', {
+    value: function<T>(this: T[], item: any, arrayProperty?: string, itemProperty?: string, useArrayPropertyForBoth: boolean = false): boolean {
+        const arr: T[] = this;
+        let itemProp: string = itemProperty;
+    
+        if (useArrayPropertyForBoth && typeof itemProperty !== typeof 'a string') {
+            itemProp = arrayProperty;
         }
-
-        if (itemProp.length === 0 && currentItem[arrayProperty] === item) {
-            return true;
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            const currentItem: any = arr[i];
+    
+            if (!isNullOrEmpty(arrayProperty) && currentItem === item) {
+                return true;
+            }
+    
+            if (itemProp.length === 0 && currentItem[arrayProperty] === item) {
+                return true;
+            }
+    
+            if (currentItem[arrayProperty] === item[itemProp]) {
+                return true;
+            }
         }
+    
+        return false;
+    }
+});
 
-        if (currentItem[arrayProperty] === item[itemProp]) {
-            return true;
+Object.defineProperty(Array.prototype, 'FirstOrDefault', {
+    value: function<T>(this: T[], predicateFunc: (item: T) => boolean, defaultValue: T|null = null): T|null {
+        const arr: T[] = this;
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            const item: any = arr[i];
+            if (predicateFunc(item)) {
+                return item;
+            }
         }
+    
+        return defaultValue;
     }
+});
 
-    return false;
-};
-
-Array.prototype.FirstOrDefault = function<T>(this: T[], predicateFunc: (item: T) => boolean): T|null {
-    const arr: T[] = this;
-
-    for (let i: number = 0; i < arr.length; i++) {
-        const item: any = arr[i];
-        if (predicateFunc(item)) {
-            return item;
+Object.defineProperty(Array.prototype, 'IndexOf', {
+    value: function<T>(this: T[], predicateFunc: (item: T) => boolean): number {
+        const arr: T[] = this;
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            const item: any = arr[i];
+            if (predicateFunc(item)) {
+                return i;
+            }
         }
+    
+        return -1;
     }
+});
 
-    return null;
-};
-
-Array.prototype.IndexOf = function<T>(this: T[], predicateFunc: (item: T) => boolean): number {
-    const arr: T[] = this;
-
-    for (let i: number = 0; i < arr.length; i++) {
-        const item: any = arr[i];
-        if (predicateFunc(item)) {
-            return i;
+Object.defineProperty(Array.prototype, 'Where', {
+    value: function<T>(this: T[], predicateFunc: (item: T) => boolean): T[] {
+        const arr: T[] = this;
+        const result: T[] = [];
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            const item: any = arr[i];
+            if (predicateFunc(item)) {
+                result.push(item);
+            }
         }
+        return result;
     }
+});
 
-    return -1;
-};
-
-Array.prototype.Where = function<T>(this: T[], predicateFunc: (item: T) => boolean): T[] {
-    const arr: T[] = this;
-    const result: T[] = [];
-
-    for (let i: number = 0; i < arr.length; i++) {
-        const item: any = arr[i];
-        if (predicateFunc(item)) {
-            result.push(item);
-        }
-    }
-    return result;
-};
-
-Array.prototype.OrderBy = function<T>(this: T[], keySelector: (item: T) => any): T[]  {
-    const arr: T[] = this;
-    const result: T[] = [];
-    const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
-        const keySelectorValue1: any = keySelector(item1);
-        const keySelectorValue2: any = keySelector(item2);
-        return keySelectorValue1 > keySelectorValue2 ? 1 : keySelectorValue2 > keySelectorValue1 ? -1 : 0;
-    };
-
-    for (let i: number = 0; i < arr.length; i++) {
-        return arr.sort(compareFunction);
-    }
-
-    return result;
-};
-
-Array.prototype.OrderByDescending = function<T>(this: T[], keySelector: (item: T) => any): T[]  {
-    const arr: T[] = this;
-    const result: T[] = [];
-    const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
-        const keySelectorValue1: any = keySelector(item1);
-        const keySelectorValue2: any = keySelector(item2);
-        return keySelectorValue1 > keySelectorValue2 ? -1 : keySelectorValue2 > keySelectorValue1 ? 1 : 0;
-    };
-
-    for (let i: number = 0; i < arr.length; i++) {
-        return arr.sort(compareFunction);
-    }
-
-    return result;
-};
-
-Array.prototype.OrderByMultiple = function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[]  {
-    const arr: T[] = [...this];
-    const result: T[] = [];
-
-    const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
-        for (let i: number = 0; i < keySelectors.length; i++) {
-            const keySelector: any = keySelectors[i];
+Object.defineProperty(Array.prototype, 'OrderBy', {
+    value: function<T>(this: T[], keySelector: (item: T) => any): T[]  {
+        const arr: T[] = this;
+        const result: T[] = [];
+        const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
             const keySelectorValue1: any = keySelector(item1);
             const keySelectorValue2: any = keySelector(item2);
-
-            if (keySelectorValue1 > keySelectorValue2) {
-                return 1;
-            }
-
-            if (keySelectorValue2 > keySelectorValue1) {
-                return -1;
-            }
+            return keySelectorValue1 > keySelectorValue2 ? 1 : keySelectorValue2 > keySelectorValue1 ? -1 : 0;
+        };
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            return arr.sort(compareFunction);
         }
-
-        return 0;
-    };
-
-    for (let i: number = 0; i < arr.length; i++) {
-        return arr.sort(compareFunction);
+    
+        return result;
     }
+});
 
-    return result;
-};
-
-Array.prototype.OrderByMultipleDescending = function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[]  {
-    const arr: T[] = [...this];
-    const result: T[] = [];
-
-    const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
-        for (let i: number = 0; i < keySelectors.length; i++) {
-            const keySelector: any = keySelectors[i];
+Object.defineProperty(Array.prototype, 'OrderByDescending', {
+    value: function<T>(this: T[], keySelector: (item: T) => any): T[]  {
+        const arr: T[] = this;
+        const result: T[] = [];
+        const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
             const keySelectorValue1: any = keySelector(item1);
             const keySelectorValue2: any = keySelector(item2);
+            return keySelectorValue1 > keySelectorValue2 ? -1 : keySelectorValue2 > keySelectorValue1 ? 1 : 0;
+        };
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            return arr.sort(compareFunction);
+        }
+    
+        return result;
+    }
+});
 
-            if (keySelectorValue1 > keySelectorValue2) {
-                return -1;
+Object.defineProperty(Array.prototype, 'OrderByMultiple', {
+    value: function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[]  {
+        const arr: T[] = [...this];
+        const result: T[] = [];
+    
+        const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
+            for (let i: number = 0; i < keySelectors.length; i++) {
+                const keySelector: any = keySelectors[i];
+                const keySelectorValue1: any = keySelector(item1);
+                const keySelectorValue2: any = keySelector(item2);
+    
+                if (keySelectorValue1 > keySelectorValue2) {
+                    return 1;
+                }
+    
+                if (keySelectorValue2 > keySelectorValue1) {
+                    return -1;
+                }
+            }
+    
+            return 0;
+        };
+    
+        for (let i: number = 0; i < arr.length; i++) {
+            return arr.sort(compareFunction);
+        }
+    
+        return result;
+    }
+});
+
+Object.defineProperty(Array.prototype, 'OrderByMultipleDescending', {
+    value: function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[] {
+        const arr: T[] = [...this];
+        const result: T[] = [];
+
+        const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
+            for (let i: number = 0; i < keySelectors.length; i++) {
+                const keySelector: any = keySelectors[i];
+                const keySelectorValue1: any = keySelector(item1);
+                const keySelectorValue2: any = keySelector(item2);
+
+                if (keySelectorValue1 > keySelectorValue2) {
+                    return -1;
+                }
+
+                if (keySelectorValue2 > keySelectorValue1) {
+                    return 1;
+                }
             }
 
-            if (keySelectorValue2 > keySelectorValue1) {
-                return 1;
-            }
+            return 0;
+        };
+
+        for (let i: number = 0; i < arr.length; i++) {
+            return arr.sort(compareFunction);
         }
 
-        return 0;
-    };
-
-    for (let i: number = 0; i < arr.length; i++) {
-        return arr.sort(compareFunction);
+        return result;
     }
-
-    return result;
-};
+});
