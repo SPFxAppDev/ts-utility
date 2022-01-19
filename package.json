@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/SPFxAppDev/ts-utility#readme",
   "devDependencies": {
-    "typescript": "^4.3.5"
+    "typescript": "^4.5.4"
   }
 }

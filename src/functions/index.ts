@@ -8,3 +8,5 @@ export { default as isNullOrEmpty } from './isNullOrEmpty';
 export { default as isset } from './isset';
 export { default as issetDeep } from './issetDeep';
 export { default as toBoolean } from './toBoolean';
+export { default as asyncFn } from './asyncFn';
+export { default as promiseQueue, PromiseQueue } from './promiseQueue';
