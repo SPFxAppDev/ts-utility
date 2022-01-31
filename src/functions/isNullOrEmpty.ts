@@ -1,4 +1,4 @@
-import { default as isset } from './isset';
+import isset from './isset';
 
 /**
  * Determines if the provided Property is Null or Empty (or whitespace if string-value).

@@ -1,5 +1,5 @@
-import { default as isset } from './isset';
-import { default as isNullOrEmpty } from './isNullOrEmpty';
+import isset from './isset';
+import isNullOrEmpty from './isNullOrEmpty';
 
 /**
  * A utility function for class names classNames together.

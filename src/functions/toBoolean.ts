@@ -1,8 +1,8 @@
-import { default as isset } from './isset';
+import isset from './isset';
 
 /**
  * Converts a value to a Boolean.
- * @param {any} value The Value to be converted to a Boolean.
+ * @param {any} value The Value to be converted to a Boolean. Valid values are: true, false, 'true' (case insensitive), 'false' (case insensitive), 1, 0, '1', '0'
  * @returns {boolean} If the Value is convertable to a Boolean it
  * is returned as a Boolean otherwise <c>false</c> is returned.
  */

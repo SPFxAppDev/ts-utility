@@ -10,3 +10,7 @@ export { default as issetDeep } from './issetDeep';
 export { default as toBoolean } from './toBoolean';
 export { default as asyncFn } from './asyncFn';
 export { default as promiseQueue, PromiseQueue } from './promiseQueue';
+export { default as isValidEmail } from './isValidEmail';
+export { default as randomString } from './randomString';
+export { default as replaceNonAlphanumeric } from './replaceNonAlphanumeric';
+export { default as stripHTML } from './stripHTML';

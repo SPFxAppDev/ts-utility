@@ -1,4 +1,4 @@
-import { default as isNullOrEmpty } from './isNullOrEmpty';
+import isNullOrEmpty from './isNullOrEmpty';
 
 /**
  * Get's the Value of a specific Url-Parameter.

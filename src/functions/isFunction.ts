@@ -1,4 +1,4 @@
-import { default as isset } from './isset';
+import isset from './isset';
 
 /**
  * Determines wheter the Property is a Function.

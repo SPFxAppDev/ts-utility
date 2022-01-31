@@ -1,4 +1,4 @@
-import { default as isset } from './isset';
+import isset from './isset';
 
 /**
  * Gets an nested property from an specific object or default, if not isset.

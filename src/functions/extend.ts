@@ -1,4 +1,4 @@
-import { default as arrayFrom } from './isNullOrEmpty';
+import arrayFrom from './arrayFrom';
 
 /**
  * Deep merge two objects.
