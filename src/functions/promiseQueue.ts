@@ -1,13 +1,24 @@
-import { isset, isFunction } from ".";
+import { isFunction } from ".";
 
-//TODO: Documentation
-
+/**
+ *
+ * The Result Type of promiseQueue-Function
+ * @since 1.1.0
+ */
 export type PromiseQueue<T> = {
     promiseFunc: Promise<T>;
     callback?(result: T, index: number): void|Promise<any>;
     onError?(error: any, index: number): void|Promise<any>;
 };
 
+/**
+ *
+ * Executes a list of Promise one after one (in a queu). An Error/reject will not stop the next promise call. 
+ * @param {(Array<Promise<any>>|Array<PromiseQueue<any>>)} promiseArray The array of Promises that will be executed. Use Array<PromiseQueue<any>> to handle callback or errors
+ * @param {number} [delayBetweenCalls=500] A delay time (in ms) determines a period of time between each execution
+ * @return {*}  {Promise<void>}
+ * @since 1.1.0
+ */
 export default async function promiseQueue(promiseArray: Array<Promise<any>>|Array<PromiseQueue<any>>, delayBetweenCalls: number = 500): Promise<void> {
     await promiseQueueExecutor(promiseArray, 0, delayBetweenCalls);
 }

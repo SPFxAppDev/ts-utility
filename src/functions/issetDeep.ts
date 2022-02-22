@@ -5,6 +5,7 @@ import isset from './isset';
  * @param {any} objectToCheck The Property to checked.
  * @param {string} keyNameSpace The Key-Namespace of the Property (for example: "My.Nested.Property").
  * @returns {boolean} If the Property is set <c>true</c> otherwise <c>false</c>.
+ * @since 1.0.0
  */
 export default function issetDeep(objectToCheck: any, keyNameSpace: string): boolean {
     if (!isset(objectToCheck)) {

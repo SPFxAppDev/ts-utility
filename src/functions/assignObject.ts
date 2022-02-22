@@ -1,4 +1,8 @@
 /* tslint:disable */
+/**
+ *  
+ * @since 1.0.0
+ */
 if (typeof (Object as any).assign !== 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {

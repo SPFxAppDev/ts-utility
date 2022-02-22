@@ -158,18 +158,19 @@ if(!isset(Array.prototype.OrderBy)) {
     Object.defineProperty(Array.prototype, 'OrderBy', {
         value: function<T>(this: T[], keySelector: (item: T) => any): T[]  {
             const arr: T[] = this;
-            const result: T[] = [];
+            // const result: T[] = [];
             const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
                 const keySelectorValue1: any = keySelector(item1);
                 const keySelectorValue2: any = keySelector(item2);
                 return keySelectorValue1 > keySelectorValue2 ? 1 : keySelectorValue2 > keySelectorValue1 ? -1 : 0;
             };
         
-            for (let i: number = 0; i < arr.length; i++) {
-                return arr.sort(compareFunction);
-            }
+            // for (let i: number = 0; i < arr.length; i++) {
+            //     return arr.sort(compareFunction);
+            // }
         
-            return result;
+            return arr.sort(compareFunction);
+            // return result;
         }
     });
 }
@@ -178,18 +179,19 @@ if(!isset(Array.prototype.OrderByDescending)) {
     Object.defineProperty(Array.prototype, 'OrderByDescending', {
         value: function<T>(this: T[], keySelector: (item: T) => any): T[]  {
             const arr: T[] = this;
-            const result: T[] = [];
+            // const result: T[] = [];
             const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
                 const keySelectorValue1: any = keySelector(item1);
                 const keySelectorValue2: any = keySelector(item2);
                 return keySelectorValue1 > keySelectorValue2 ? -1 : keySelectorValue2 > keySelectorValue1 ? 1 : 0;
             };
         
-            for (let i: number = 0; i < arr.length; i++) {
-                return arr.sort(compareFunction);
-            }
+            // for (let i: number = 0; i < arr.length; i++) {
+                // return arr.sort(compareFunction);
+            // }
+            return arr.sort(compareFunction);
         
-            return result;
+            // return result;
         }
     });
 }
@@ -198,7 +200,7 @@ if(!isset(Array.prototype.OrderByMultiple)) {
     Object.defineProperty(Array.prototype, 'OrderByMultiple', {
         value: function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[]  {
             const arr: T[] = [...this];
-            const result: T[] = [];
+            // const result: T[] = [];
         
             const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
                 for (let i: number = 0; i < keySelectors.length; i++) {
@@ -218,11 +220,13 @@ if(!isset(Array.prototype.OrderByMultiple)) {
                 return 0;
             };
         
-            for (let i: number = 0; i < arr.length; i++) {
-                return arr.sort(compareFunction);
-            }
+            // for (let i: number = 0; i < arr.length; i++) {
+            //     return arr.sort(compareFunction);
+            // }
+
+            return arr.sort(compareFunction);
         
-            return result;
+            // return result;
         }
     });
 }
@@ -231,7 +235,7 @@ if(!isset(Array.prototype.OrderByMultipleDescending)) {
     Object.defineProperty(Array.prototype, 'OrderByMultipleDescending', {
         value: function<T>(this: T[], keySelectors: Array<(item: T) => any>): T[] {
             const arr: T[] = [...this];
-            const result: T[] = [];
+            // const result: T[] = [];
 
             const compareFunction: (item1: any, item2: any) => number = (item1: any, item2: any): number => {
                 for (let i: number = 0; i < keySelectors.length; i++) {
@@ -251,11 +255,13 @@ if(!isset(Array.prototype.OrderByMultipleDescending)) {
                 return 0;
             };
 
-            for (let i: number = 0; i < arr.length; i++) {
-                return arr.sort(compareFunction);
-            }
+            // for (let i: number = 0; i < arr.length; i++) {
+            //     return arr.sort(compareFunction);
+            // }
 
-            return result;
+            return arr.sort(compareFunction);
+
+            // return result;
         }
     });
 }
