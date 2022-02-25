@@ -5,6 +5,7 @@ import isset from './isset';
  * @param {any} property The Property to checked.
  * @returns {boolean} If the Property is Null or Empty or has
  * not "length" as property <c>true</c> otherwise <c>false</c>.
+ * @since 1.0.0
  */
 export default function isNullOrEmpty(property: any): boolean {
     if (!isset(property)) {

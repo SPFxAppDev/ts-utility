@@ -2,7 +2,7 @@ import isset from './isset';
 import isNullOrEmpty from './isNullOrEmpty';
 
 /**
- * A utility function for class names classNames together.
+ * A utility function for conditionally joining css class names together.
  * @example cssClasses('spfx-app-dev', 'theme'); // => 'spfx-app-dev theme'
  * @example cssClasses('spfx-app-dev', { theme: false });  // => 'spfx-app-dev'
  * @example cssClasses({ 'spfx-app-dev': true });  // => 'spfx-app-dev'
@@ -12,6 +12,7 @@ import isNullOrEmpty from './isNullOrEmpty';
  * @example cssClasses('spfx-app-dev', { theme: true, active: false }, 'item');  // => 'spfx-app-dev theme item'
  * @example cssClasses(null, false, 'spfx-app-dev', undefined, 0, 1, { theme: null }, '');  // => 'spfx-app-dev'
  * @example const arr = ['theme', { active: true, item: false }]; cssClasses('spfx-app-dev', arr);  // => 'spfx-app-dev theme active'
+ * @since 1.0.0
  */
 export default function cssClasses(...args: any[]): string {
     const classes: any[] = [];

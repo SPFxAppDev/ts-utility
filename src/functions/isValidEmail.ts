@@ -5,7 +5,8 @@ import isNullOrEmpty from './isNullOrEmpty';
  * @param {string} email the value to check
  * @return {boolean} If the passed value is a valid email <c>true</c> otherwise <c>false</c>
  * @example isValidEmail('seryoga@spfx-app.dev') // ==> returns true 
- * @example isValidEmail('spfx-app.dev') // ==> returns false 
+ * @example isValidEmail('spfx-app.dev') // ==> returns false
+ * @since 1.1.0
  */
 export default function isValidEmail(email: string): boolean {
 

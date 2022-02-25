@@ -4,6 +4,7 @@
  * @param arrLike An array-like or iterable object to convert to an array.
  * @param mapFunc (optional) Map function to call on every element of the array.
  * @param thisArgs (optional) Value to use as this when executing mapFn.
+ * @since 1.0.0
  */
 /* tslint:disable */
 export default function arrayFrom(arrLike: any, mapFunc?: any, thisArgs?: any) {

@@ -5,6 +5,7 @@ import isNullOrEmpty from './isNullOrEmpty';
  * @param {string} value The value to replace all non-alphanumeric and non-underscore characters
  * @param {string} replaceValue A string containing the text to replace for non-alphanumeric and non-underscore characters. Default: '' 
  * @return {string} A new string value without non-alphanumeric and non-underrscore characters.
+ * @since 1.1.0
  */
 export default function replaceNonAlphanumeric(value: string, replaceValue: string = ''): string {
 
@@ -18,4 +19,3 @@ export default function replaceNonAlphanumeric(value: string, replaceValue: stri
 
     return value.replace(/[^\w]/gi, replaceValue);
 }
-

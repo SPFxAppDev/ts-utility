@@ -6,6 +6,7 @@ import arrayFrom from './arrayFrom';
  * @param sources An object containing additional properties to merge in.
  * @param inCaseOfArrayUseSourceObject if true, then the array from source object will
  * be use if target-value and source-value are arrays. Otherwise both arrays will be merged
+ * @since 1.0.0
  */
 export default function extend(target: any, source: any, inCaseOfArrayUseSourceObject: boolean = true): any {
 

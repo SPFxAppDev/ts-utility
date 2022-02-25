@@ -5,6 +5,7 @@ import isNullOrEmpty from './isNullOrEmpty';
  * @param {string} parameterName The Name of the searched Parameter.
  * @param {string} url The Url which the Parameter-Value is read from (if not set the current Url is used).
  * @returns {string|null} If the Parameter exists on the Url the Value is returned as a string.
+ * @since 1.0.0
  */
 export default function getUrlParameter(parameterName: string, url: string = null): string|null {
 
