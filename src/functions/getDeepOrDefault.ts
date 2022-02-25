@@ -19,7 +19,7 @@ export default function getDeepOrDefault<TResult>(objectToCheck: any, keyNameSpa
     for (let i: number = 0; i < namespaceKeys.length; i++) {
         const currentKey: string = namespaceKeys[i];
 
-        if (!isset(currentObjectPath)) {
+        if (!isset(currentObjectPath[currentKey])) {
             return defaultValue;
         }
 

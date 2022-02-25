@@ -1,15 +1,28 @@
 import { isFunction } from ".";
 
+export type ParameterlessPromiseQueueFunc<T> = () => Promise<T>;
+
 /**
  *
  * The Result Type of promiseQueue-Function
  * @since 1.1.0
  */
 export type PromiseQueue<T> = {
-    promiseFunc: Promise<T>;
+    promiseFunc: ParameterlessPromiseQueueFunc<T>;
     callback?(result: T, index: number): void|Promise<any>;
     onError?(error: any, index: number): void|Promise<any>;
 };
+
+export function toParameterlessPromiseQueueFunc<T>(promiseFunc, ...funcParams: any): ParameterlessPromiseQueueFunc<T> {
+    const wrapper: ParameterlessPromiseQueueFunc<T> = function(): Promise<T> {
+
+        return promiseFunc(...funcParams);
+    };
+
+    return wrapper;
+}
+
+
 
 /**
  *
@@ -19,22 +32,22 @@ export type PromiseQueue<T> = {
  * @return {*}  {Promise<void>}
  * @since 1.1.0
  */
-export default async function promiseQueue(promiseArray: Array<Promise<any>>|Array<PromiseQueue<any>>, delayBetweenCalls: number = 500): Promise<void> {
+export default async function promiseQueue(promiseArray: Array<ParameterlessPromiseQueueFunc<any>>|Array<PromiseQueue<any>>, delayBetweenCalls: number = 500): Promise<void> {
     await promiseQueueExecutor(promiseArray, 0, delayBetweenCalls);
 }
 
-const promiseQueueExecutor = async (promiseArray: Array<Promise<any>>|Array<PromiseQueue<any>>, index: number, delayBetweenCalls: number): Promise<void> => {
+const promiseQueueExecutor = async (promiseArray: Array<ParameterlessPromiseQueueFunc<any>>|Array<PromiseQueue<any>>, index: number, delayBetweenCalls: number): Promise<void> => {
 
     return new Promise<void>((resolve, reject) => {
 
-        let currentPromise: Promise<any>;
+        let currentPromise: ParameterlessPromiseQueueFunc<any>;
         let callbackFunc: (result: any, index: number) => void|Promise<any> = undefined;
         let errorFunc: (error: any, index: number) => void|Promise<any> = undefined;
 
-        if(promiseArray[index] instanceof Promise) {
-            currentPromise = promiseArray[index] as Promise<any>;
+        if(isFunction(promiseArray[index])) {
+            currentPromise = promiseArray[index] as ParameterlessPromiseQueueFunc<any>;
         }
-        else if((promiseArray[index] as PromiseQueue<any>).promiseFunc instanceof Promise) {
+        else if(isFunction((promiseArray[index] as PromiseQueue<any>).promiseFunc)) {
             const promiseQueue: PromiseQueue<any> = (promiseArray[index] as PromiseQueue<any>);
             currentPromise = promiseQueue.promiseFunc;
             callbackFunc = isFunction(promiseQueue.callback) ? promiseQueue.callback : callbackFunc;
@@ -52,7 +65,7 @@ const promiseQueueExecutor = async (promiseArray: Array<Promise<any>>|Array<Prom
         //     }, delayBetweenCalls);
         // }
 
-        currentPromise.then(async (promiseResult: any) => {
+        currentPromise().then(async (promiseResult: any) => {
 
             if(isFunction(callbackFunc)) {
                 const callbackResult = callbackFunc(promiseResult, index);
@@ -88,33 +101,3 @@ const promiseQueueExecutor = async (promiseArray: Array<Promise<any>>|Array<Prom
         });
     });
 }
-
-// export default async function promiseQueue(promiseArray: Array<Promise<any>>, delayBetweenCalls: number = 500): Promise<void> {
-//     await promiseQueueExecutor(promiseArray, 0, delayBetweenCalls);
-// }
-
-// const promiseQueueExecutor = async (promiseArray: Array<Promise<any>>, index: number, delayBetweenCalls: number): Promise<void> => {
-
-//     return new Promise<void>((resolve, reject) => {
-//         let currentPromise: Promise<any> = promiseArray[index];
-
-//         currentPromise.then(async () => {
-//             if(index + 1 >= promiseArray.length) {
-//                 return resolve();
-//             }
-
-//             setTimeout(async () => {
-//                 await promiseQueueExecutor(promiseArray, index+1, delayBetweenCalls);
-//                 return resolve();
-//             }, delayBetweenCalls);
-
-//         }).catch(async () => {
-//             if(index + 1 >= promiseArray.length) {
-//                 return resolve();
-//             }
-    
-//             await promiseQueueExecutor(promiseArray, index+1, delayBetweenCalls);
-//             return resolve();
-//         });
-//     });
-// }

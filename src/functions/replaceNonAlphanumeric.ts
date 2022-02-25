@@ -19,4 +19,3 @@ export default function replaceNonAlphanumeric(value: string, replaceValue: stri
 
     return value.replace(/[^\w]/gi, replaceValue);
 }
-
