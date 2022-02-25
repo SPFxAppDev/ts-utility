@@ -47,7 +47,7 @@ This package contains some useful extensions for `String` and `Array` and some m
 
 ## Demo
 
-You can find some exmplaes/demo applications at [codesandbox.io](https://codesandbox.io/s/ts-utility-tzudsk) or 
+You can find some exmplaes/demo applications at [codesandbox.io](https://codesandbox.io/s/ts-utility-tzudsk) or [GitHub](https://github.com/SPFxAppDev/ts-utility/tree/master/examples/src)
 
 ## Functions
 
