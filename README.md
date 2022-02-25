@@ -1,6 +1,6 @@
 # @spfxappdev/utility
 
-![npm](https://img.shields.io/npm/v/@spfxappdev/utility) ![Lines of code](https://img.shields.io/tokei/lines/github/SPFxAppDev/ts-utility) ![npm bundle size](https://img.shields.io/bundlephobia/min/@spfxappdev/utility) ![npm](https://img.shields.io/npm/dm/@spfxappdev/utility)
+![npm](https://img.shields.io/npm/v/@spfxappdev/utility) ![npm bundle size](https://img.shields.io/bundlephobia/min/@spfxappdev/utility) ![npm](https://img.shields.io/npm/dm/@spfxappdev/utility)
 
 This package contains some useful extensions for `String` and `Array` and some more functions that need less lines of code and make the code more readable.
 

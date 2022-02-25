@@ -114,7 +114,7 @@ declare global {
 
 if(!isset(Array.prototype.FirstOrDefault)) {
     Object.defineProperty(Array.prototype, 'FirstOrDefault', {
-        value: function<T>(this: T[], predicateFunc: (item: T) => boolean, defaultValue: T|null = null): T|null {
+        value: function<T>(this: T[], predicateFunc?: (item: T) => boolean, defaultValue: T|null = null): T|null {
             const arr: T[] = this;
 
             if(isNullOrEmpty(arr)) {
@@ -285,7 +285,8 @@ if(!isset(Array.prototype.OrderByMultipleDescending)) {
 
 if(!isset(Array.prototype.Contains)) {
     Object.defineProperty(Array.prototype, 'Contains', {
-        value: function<T>(this: T[], predicateFunc: (item: T) => boolean): boolean {       
+        value: function<T>(this: T[], predicateFunc: (item: T) => boolean): boolean {  
+            const arr: T[] = this;     
             return isset(this.FirstOrDefault(predicateFunc, null));
         }
     });
