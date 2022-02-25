@@ -7,9 +7,9 @@ npm-debug.log*
 node_modules
 
 #parcel cache
-/.cache
-/build
-/.parcel-cache
+.cache
+build
+.parcel-cache
 
 # Build generated files
 lib
