@@ -23,6 +23,7 @@ theme:
 plugins:
   - tags:
       tags_file: tags.md
+  - search
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
