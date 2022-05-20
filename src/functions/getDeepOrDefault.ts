@@ -26,5 +26,5 @@ export default function getDeepOrDefault<TResult>(objectToCheck: any, keyNameSpa
         currentObjectPath = currentObjectPath[currentKey];
     }
 
-    return currentObjectPath as TResult;
+    return !isset(currentObjectPath) ? defaultValue : currentObjectPath as TResult;
 }
