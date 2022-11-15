@@ -9,6 +9,7 @@ declare global {
      * @param {string} searchTerm the specified string
      * @param {boolean} ignoreCase if <c>true</c> (default) than the case will be ignored, otherwise not
      * @returns {boolean} <c>true</c> if this strings starts with the specified searchTerm, otherwise <c>false</c>
+     * @since 1.0.0
      */
     StartsWith(searchTerm: string, ignoreCase?: boolean): boolean;
 
@@ -18,6 +19,7 @@ declare global {
      * @param {string} searchTerm the specified string
      * @param {boolean} ignoreCase if <c>true</c> (default) than the case will be ignored, otherwise not
      * @returns {boolean} <c>true</c> if this strings ends with the specified searchTerm, otherwise <c>false</c>
+     * @since 1.0.0
      */
     EndsWith(searchTerm: string, ignoreCase?: boolean): boolean;
 
@@ -27,6 +29,7 @@ declare global {
      * @param {string} searchTerm the specified string
      * @param {boolean} ignoreCase if <c>true</c> (default) than the case will be ignored, otherwise not
      * @returns {boolean} <c>true</c> if this strings contains the specified searchTerm, otherwise <c>false</c>
+     * @since 1.0.0
      */
     Contains(searchTerm: string, ignoreCase?: boolean): boolean;
 
@@ -38,6 +41,7 @@ declare global {
      * @param {string} searchTerm the specified string
      * @param {boolean} ignoreCase if <c>true</c> (default) than the case will be ignored, otherwise not
      * @returns {number} the zero-based index of the position or -1 if not exists
+     * @since 1.0.0
      */
     IndexOf(searchTerm: string, ignoreCase?: boolean): number;
 
@@ -48,6 +52,7 @@ declare global {
      * @param {number} startIndex the specified index position
      * @param {string} valueToInsert the string to insert
      * @returns {string} the new generated string
+     * @since 1.0.0
      */
     Insert(startIndex: number, valueToInsert: string): string;
 
@@ -58,6 +63,7 @@ declare global {
      * @param {boolean} ignoreCase if <c>true</c> (default) than the case will be ignored, otherwise not
      * @returns {boolean} <c>true</c> if the value of the value parameter
      * is the same as this string; otherwise, <c>false</c>.
+     * @since 1.0.0
      */
     Equals(value: string, ignoreCase?: boolean): boolean;
 
@@ -65,8 +71,17 @@ declare global {
      *
      * Determines whether a String is empty or whitespace.
      * @returns {boolean} <c>true</c> if the value of this string is empty or whitespace; otherwise, <c>false</c>.
+     * @since 1.0.0
      */
     IsEmpty(): boolean;
+
+    /**
+     *
+     * Replaces all occurrences of <c>searchTerm</c> with <c>replaceWith<c>
+     * @returns {boolean} <c>true</c> if the value of this string is empty or whitespace; otherwise, <c>false</c>.
+     * @since 1.2.0
+     */
+    ReplaceAll(searchTerm: string, replaceWith: string): string;
     }
 }
 
@@ -142,4 +157,16 @@ String.prototype.Equals = function(this: string, value: string, ignoreCase: bool
 String.prototype.IsEmpty = function(this: string): boolean {
     const s: string = this;
     return s.length < 1 || s.trim().length < 1;
+};
+
+String.prototype.ReplaceAll = function(this: string, searchTerm: string, replaceWith: string): string {
+    let s: string = this.slice();
+
+
+    if(typeof (this as any).replaceAll == "function") {
+        (this as any).replaceAll(searchTerm, replaceWith);
+    }
+    
+    return s.replace(new RegExp(searchTerm, 'g'), replaceWith);
+    
 };

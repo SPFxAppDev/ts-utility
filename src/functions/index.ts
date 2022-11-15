@@ -14,3 +14,6 @@ export { default as isValidEmail } from './isValidEmail';
 export { default as randomString } from './randomString';
 export { default as replaceNonAlphanumeric } from './replaceNonAlphanumeric';
 export { default as stripHTML } from './stripHTML';
+export { default as replaceTpl } from './replaceTpl';
+export { default as removeAllParametersFromUrl } from './removeAllParametersFromUrl';
+export * from './date';
