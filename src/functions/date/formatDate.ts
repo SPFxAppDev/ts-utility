@@ -1,13 +1,25 @@
 import isset from "../isset";
+import isNullOrEmpty from "../isNullOrEmpty";
 import '../../extensions/StringExtensions';
 
+/**
+ * Simple conversion of a date object to a specified string format
+ * @param {string} format The format of the date to convert. For example "MM/dd/yyyy" Possible values are: yyyy, yy, MM, M, dd, d, HH, H, mm, m, ss, s
+ * @param {Date} [date] Optional date to be used to convert it to the specified format. If no date is specified, the current date is used.
+ * @return {string} Returns the converted date value in the specified format
+ * @since 1.2.0
+ */
 export default function formatDate(format: string, date?: Date): string {
+
+    if(isNullOrEmpty(format)) {
+        return '';
+    }
 
     if(!isset(date)) {
         date = new Date();
     }
 
-    //YY and YYYY
+    //yy and yyyy
     const yyyy: number = date.getFullYear();
     const yy: string = yyyy.toString().substring(2);
 

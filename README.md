@@ -2,11 +2,15 @@
 
 ![npm](https://img.shields.io/npm/v/@spfxappdev/utility) ![npm bundle size](https://img.shields.io/bundlephobia/min/@spfxappdev/utility) ![npm](https://img.shields.io/npm/dm/@spfxappdev/utility)
 
-This package contains some useful extensions for `String` and `Array` and some more functions that need less lines of code and make the code more readable.
+This package contains some useful extensions for `String` and `Array` and some more functions that need less lines of code and make the code more readable. [You can find the "nicer" and more user-friendly documentation here](https://spfxappdev.github.io/ts-utility/)
 
 - [Functions](#functions)
   * [asyncFn](#asyncfn)
+  * [countWorkdays](#countworkdays)
   * [cssClasses](#cssclasses)
+  * [firstDayOfMonth](#firstdayofmonth)
+  * [firstDayOfWeek](#firstdayofweek)
+  * [formatDate](#formatdate)
   * [getDeepOrDefault](#getdeepordefault)
   * [getUrlParameter](#geturlparameter)
   * [isFunction](#isfunction)
@@ -14,11 +18,16 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [isset](#isset)
   * [issetDeep](#issetdeep)
   * [isValidEmail](#isvalidemail)
+  * [lastDayOfMonth](#lastdayofmonth)
+  * [lastDayOfWeek](#lastdayofweek)
   * [promiseQueue](#promisequeue)
   * [randomString](#randomstring)
+  * [removeAllParametersFromUrl](#removeallparametersfromurl)
   * [replaceNonAlphanumeric](#replacenonalphanumeric)
+  * [replaceTpl](#replacetpl)
   * [stripHTML](#striphtml)
   * [toBoolean](#toboolean)
+  * [weekNumber](#weeknumber)
 - [String Extensions](#string-extensions)
   * [Contains](#contains)
   * [EndsWith](#endswith)
@@ -26,6 +35,7 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [IndexOf](#indexof)
   * [Insert](#insert)
   * [IsEmpty](#isempty)
+  * [ReplaceAll](#replaceall)
   * [StartsWith](#startswith)
 - [Array Extensions](#array-extensions)
   * [AddAt](#addat)
@@ -62,7 +72,11 @@ import { isset } from '@spfxappdev/utility';
 ### API
 
 - [asyncFn](#asyncfn)
+- [countWorkdays](#countworkdays)
 - [cssClasses](#cssclasses)
+- [firstDayOfMonth](#firstdayofmonth)
+- [firstDayOfWeek](#firstdayofweek)
+- [formatDate](#formatdate)
 - [getDeepOrDefault](#getdeepordefault)
 - [getUrlParameter](#geturlparameter)
 - [isFunction](#isfunction)
@@ -70,11 +84,16 @@ import { isset } from '@spfxappdev/utility';
 - [isset](#isset)
 - [issetDeep](#issetdeep)
 - [isValidEmail](#isvalidemail)
+- [lastDayOfMonth](#lastdayofmonth)
+- [lastDayOfWeek](#lastdayofweek)
 - [promiseQueue](#promisequeue)
 - [randomString](#randomstring)
+- [removeAllParametersFromUrl](#removeallparametersfromurl)
 - [replaceNonAlphanumeric](#replacenonalphanumeric)
+- [replaceTpl](#replacetpl)
 - [stripHTML](#striphtml)
 - [toBoolean](#toboolean)
+- [weekNumber](#weeknumber)
 
 #### asyncFn 
 
@@ -357,6 +376,23 @@ randomString(15); // ==> G4XBtQcgDSHWdQG
 randomString(6, 'abcdef0123456789'); // ==> fe693c ==> random hex color
 ```
 ___
+
+#### removeAllParametersFromUrl
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Removes all URL parameters and URL-Fragments (hash) from the passed url
+
+##### Examples
+
+```typescript
+import { removeAllParametersFromUrl } from '@spfxappdev/utility';
+removeAllParametersFromUrl("https://spfx-app.dev#firstAnchor#secondAnchor"); // ==> https://spfx-app.dev
+removeAllParametersFromUrl("https://spfx-app.dev/path1/path2?param1=1&param2=2#firstAnchor#secondAnchor"); // ==> https://spfx-app.dev/path1/path2
+removeAllParametersFromUrl("https://spfx-app.dev/#/routedpath"); // ==> https://spfx-app.dev/
+```
+___
+
 #### replaceNonAlphanumeric
 
 ![since @spfxappdev/utility@1.1.0](https://img.shields.io/badge/since-v1.1.0-green)
@@ -371,6 +407,29 @@ replaceNonAlphanumeric('This is a text: 1234567890ß!"§$%&/()=?+#____<---->'); 
 replaceNonAlphanumeric('This is a text: öäü1234567890ß!"§$%&/()=?+#____<---->', '*') // ==> This*is*a*text*****1234567890**************____******
 ```
 ___
+
+#### replaceTpl
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Replaces all occurrences of the placeholder in the specified template
+
+##### Examples
+
+```typescript
+import { replaceTpl } from '@spfxappdev/utility';
+replaceTpl("Hello {UserName}. Welcome {UserName}, this placeholder is not available: {SPFxAppDev}", { UserName: "SPFxAppDev" }); 
+// Result: Hello SPFxAppDev. Welcome SPFxAppDev, this placeholder is not available: {SPFxAppDev}
+
+//With functions
+replaceTpl("Hello {User.FirstName} {User.LastName}, last login: {User.LastLogin}", { User: { FirstName: "SPFxApp", LastName: "Dev", LastLogin: () => { return new Date().toString(); } } });
+// Result: Hello SPFxApp Dev, last login: Tue Nov 15 2022 15:59:34 GMT+0100 (Central European Standard Time)
+
+replaceTpl("Hello {404}", { User: { FirstName: "SPFxApp", LastName: "Dev" } }, "");
+// Result: Hello 
+```
+___
+
 #### stripHTML
 
 ![since @spfxappdev/utility@1.1.0](https://img.shields.io/badge/since-v1.1.0-green)
@@ -407,6 +466,137 @@ toBoolean(undefined) // => false
 ```
 
 
+### Date functions
+#### countWorkdays
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Counts all working days from a given date to another date. You can pass an array with dates that should not be counted (e.g. holidays). 
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+countWorkdays(); //workdays in November 2022, Monday-Friday ==> 22
+countWorkdays(new Date(2022, 10, 14)); //workdays from 14th November 2022 until end of month, Monday-Friday ==> 13
+countWorkdays(new Date(2022, 10, 14), new Date(2022, 10, 20)); //workdays from 14th November 2022 until 20th Nov 2022, Monday-Friday ==> 5
+countWorkdays(undefined, undefined, 1, Weekday.Saturday); //workdays in November 2022, Monday-Saturday ==> 26
+countWorkdays(new Date(2022, 11, 1), undefined, undefined, undefined, [new Date(2022, 11, 24), new Date(2022, 11, 25), new Date(2022, 11, 26), new Date(2022, 11, 31)]); //workdays in December 2022, Monday-Friday and day off (24-26th + 31st) ==> 21
+```
+___
+
+#### firstDayOfMonth
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Determines the first day of month of the current or specified date.
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+firstDayOfMonth(); //Tue Nov 01 2022
+firstDayOfMonth(new Date(2022, 1, 15)); //Tue Feb 01 2022
+```
+___
+
+#### firstDayOfWeek
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Determines the first day of week of the current or specified date.
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+firstDayOfWeek()); //Mon Nov 14 2022
+firstDayOfWeek(new Date(2022, 1, 15))); //Mon Feb 14 2022
+//THE WEEK BEGINS WITH SUNDAY
+firstDayOfWeek(null, Weekday.Sunday)); //Sun Nov 13 2022
+```
+___
+
+#### formatDate
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Simple conversion of a date object to a specified string format.
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+formatDate("dd.MM.yyyy")); //Now ==> 14.11.2022
+formatDate("MM/dd/yyyy", new Date(2022, 1, 1))); //result: 02/01/2022
+formatDate("M/d/yy", new Date(2022, 1, 1))); //result: 2/1/22
+```
+
+Possible values in format could be:
+
+| Input | Example | Description                         |
+|-------|---------|-------------------------------------|
+| yyyy  | 2022    | 4 digit year                        |
+| yy    | 22      | 2 digit year                        |
+| MM    | 09      | 2 digit month number                |
+| M     | 9 or 11 | 1-2 digit month number              |
+| dd    | 09      | 2 digit day of month number         |
+| d     | 9 or 11 | 1-2 digit day of month number       |
+| HH    | 09      | 2 digit hours number (24h format)   |
+| H     | 9 or 11 | 1-2 digit hours number (24h format) |
+| mm    | 09      | 2 digit minutes number              |
+| m     | 9 or 11 | 1-2 digit minutes number            |
+| ss    | 09      | 2 digit seconds number              |
+| s     | 9 or 11 | 1-2 digit seconds number            |
+___
+
+#### lastDayOfMonth
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Determines the last day of month of the current or specified date.
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+lastDayOfMonth(); //Wed Nov 30 2022
+lastDayOfMonth(new Date(2022, 1, 15)); //Mon Feb 28 2022
+```
+___
+
+#### lastDayOfWeek
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Determines the last day of week of the current or specified date.
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+lastDayOfWeek()); //Sun Nov 20 2022
+lastDayOfWeek(new Date(2022, 1, 15))); //Sun Feb 20 2022
+//THE WEEK BEGINS WITH SUNDAY
+lastDayOfWeek(null, Weekday.Sunday)); //Sat Nov 19 2022
+```
+___
+
+#### weekNumber
+
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Determines the week number of the current or specified date (ISO 8601 = the week with the starting year's first Thursday in it). 
+
+##### Examples
+
+```typescript
+//Current date (new Date()) ==> is 14 November
+weekNumber(); //2022 Nov 14 ==> 46
+weekNumber(new Date(2022, 1, 15)); //2022 Feb 15 ==> 7
+weekNumber(new Date(2019, 11, 30)); //2019 Dec 30 (special case) ==> 1
+```
+___
 
 ## String-Extensions
 
@@ -438,6 +628,7 @@ import '@spfxappdev/utility/lib/extensions/StringExtensions';
 - [IndexOf](#indexof)
 - [Insert](#insert)
 - [IsEmpty](#isempty)
+- [ReplaceAll](#replaceall)
 - [StartsWith](#startswith)
 
 #### Contains
@@ -519,6 +710,17 @@ Determines whether a String is empty or whitespace.
 "     ".IsEmpty(); // ==> true
 ```
 ___
+#### ReplaceAll
+![since @spfxappdev/utility@1.2.0](https://img.shields.io/badge/since-v1.2.0-blue)
+
+Replaces all occurrences of `searchTerm` with `replaceWith`
+
+##### Examples
+
+```typescript
+"Helloo Woorld, welcoome too string extensioons".ReplaceAll("oo", "o"); // ==>  Hello World, welcome to string extensions
+```
+___
 #### StartsWith
 
 ![since @spfxappdev/utility@1.0.0](https://img.shields.io/badge/since-v1.0.0-orange)
@@ -534,6 +736,16 @@ Determines whether the beginning of this string instance matches a specified str
 ```
 
 ## Array-Extensions
+
+```javascript
+Note: The variable must not be undefined or null. Otherwise an exception is thrown (see example below).
+```
+
+
+```typescript
+let undefinedArr: string[];
+undefinedArr.Contains("error"); //Throws an error, because the variable is not defined.
+```
 
 ### Usage
 

@@ -464,7 +464,7 @@ var _arrayExtensions = require("../../src/extensions/ArrayExtensions");
 var _stringExtensions = require("../../src/extensions/StringExtensions");
 var _src = require("../../src");
 var _logger = require("@spfxappdev/logger");
-var _class, _dec, _dec1, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class1, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _class2, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _class3, _dec38, _class4, _dec39, _dec40;
+var _class, _dec, _dec1, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class1, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _class2, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _class3, _dec42, _class4, _dec43, _dec44;
 const simpleArray = [
     {
         id: _src.randomString(),
@@ -768,13 +768,14 @@ let ArrayApp = (_class = class ArrayApp {
 ], Object.getOwnPropertyDescriptor(_class.prototype, "removeAtExamples"), _class.prototype), _class);
 let StringsApp = (_class1 = class StringsApp {
     start() {
-    //    this.startsWithExamples();
-    //    this.endsWithExamples();
-    //    this.containsExamples();
-    //    this.indexOfExamples();
-    //    this.insertExamples();
-    //    this.equalsExamples();
-    //    this.isEmptyExamples();
+        //    this.startsWithExamples();
+        //    this.endsWithExamples();
+        //    this.containsExamples();
+        //    this.indexOfExamples();
+        //    this.insertExamples();
+        //    this.equalsExamples();
+        //    this.isEmptyExamples();
+        this.replaceAllExamples();
     }
     startsWithExamples() {
         console.log(`${this.testString}.StartsWith('hello') ==> `, this.testString.StartsWith("hello"));
@@ -810,6 +811,11 @@ let StringsApp = (_class1 = class StringsApp {
         console.log(`"".IsEmpty() ==> `, "".IsEmpty());
         console.log(`"     ".IsEmpty() ==> `, "     ".IsEmpty());
     }
+    replaceAllExamples() {
+        console.log(`"Helloo Woorld, welcoome too string extensioons".ReplaceAll() ==> `, "Helloo Woorld, welcoome too string extensioons".ReplaceAll("oo", "o")); //Hello World, welcome to string extensions
+        console.log(`"".IsEmpty() ==> `, "".IsEmpty());
+        console.log(`"     ".IsEmpty() ==> `, "     ".IsEmpty());
+    }
     constructor(){
         this.testString = "Hello @spfxappdev/utility";
     }
@@ -827,7 +833,9 @@ let StringsApp = (_class1 = class StringsApp {
     _dec18
 ], Object.getOwnPropertyDescriptor(_class1.prototype, "equalsExamples"), _class1.prototype), _dec19 = _logger.log(), _helpers.applyDecoratedDescriptor(_class1.prototype, "isEmptyExamples", [
     _dec19
-], Object.getOwnPropertyDescriptor(_class1.prototype, "isEmptyExamples"), _class1.prototype), _class1);
+], Object.getOwnPropertyDescriptor(_class1.prototype, "isEmptyExamples"), _class1.prototype), _dec20 = _logger.log(), _helpers.applyDecoratedDescriptor(_class1.prototype, "replaceAllExamples", [
+    _dec20
+], Object.getOwnPropertyDescriptor(_class1.prototype, "replaceAllExamples"), _class1.prototype), _class1);
 let FunctionsApp = (_class2 = class FunctionsApp {
     start() {
         // this.ayncFnExamples();
@@ -845,9 +853,12 @@ let FunctionsApp = (_class2 = class FunctionsApp {
         // this.stripHTMLExamples();
         // this.toBooleanExamples();
         this.replaceTplExample();
+        this.removeAllUrlParametersExample();
         this.formatDateExample();
         this.wokdaysExample();
         this.firstAndLastDateExample();
+        this.weekNumberExample();
+        this.firstAndLastWeekDateExample();
     }
     dummyPromise(success = true, delay = 5000) {
         console.log("dummyPromise START");
@@ -1086,7 +1097,22 @@ let FunctionsApp = (_class2 = class FunctionsApp {
                 }
             }
         }));
-    //Hello SPFxApp Dev, last login: Tue Nov 15 2022 15:59:34 GMT+0100 (Central European Standard Time)
+        //Hello SPFxApp Dev, last login: Tue Nov 15 2022 15:59:34 GMT+0100 (Central European Standard Time)
+        console.log(_src.replaceTpl("Hello {404}", {
+            User: {
+                FirstName: "SPFxApp",
+                LastName: "Dev"
+            }
+        }, ""));
+    //Hello 
+    }
+    removeAllUrlParametersExample() {
+        console.log(_src.removeAllParametersFromUrl("https://spfx-app.dev#firstAnchor#secondAnchor"));
+        //removeAllParametersFromUrl("https://spfx-app.dev#firstAnchor#secondAnchor")
+        console.log(_src.removeAllParametersFromUrl("https://spfx-app.dev/path1/path2?param1=1&param2=2#firstAnchor#secondAnchor"));
+        //https://spfx-app.dev/path1/path2
+        console.log(_src.removeAllParametersFromUrl("https://spfx-app.dev/#/routedpath"));
+    //https://spfx-app.dev/
     }
     formatDateExample() {
         console.log(_src.formatDate("dd.MM.yyyy")); //Now ==> 14.11.2022
@@ -1109,72 +1135,98 @@ let FunctionsApp = (_class2 = class FunctionsApp {
         console.log("First date of current month is: ", _src.firstDayOfMonth()); //Tue Nov 01 2022
         console.log("Last date of current month is: ", _src.lastDayOfMonth()); //Wed Nov 30 2022
         console.log("First date of 15 February 2022 is: ", _src.firstDayOfMonth(new Date(2022, 1, 15))); //Tue Feb 01 2022
-        console.log("First date of 15 February 2022 is: ", _src.lastDayOfMonth(new Date(2022, 1, 15))); //Mon Feb 28 2022
+        console.log("Last date of 15 February 2022 is: ", _src.lastDayOfMonth(new Date(2022, 1, 15))); //Mon Feb 28 2022
+    }
+    firstAndLastWeekDateExample() {
+        console.log("First date of current week is: ", _src.firstDayOfWeek()); //Mon Nov 14 2022
+        console.log("Last date of current week is: ", _src.lastDayOfWeek()); //Sun Nov 20 2022
+        console.log("First date of week of 15 February 2022 is: ", _src.firstDayOfWeek(new Date(2022, 1, 15))); //Mon Feb 14 2022
+        console.log("Last date of week of 15 February 2022 is: ", _src.lastDayOfWeek(new Date(2022, 1, 15))); //Sun Feb 20 2022
+        console.log("First date of current week by starting with Sunday is: ", _src.firstDayOfWeek(null, _src.Weekday.Sunday)); //Sun Nov 13 2022
+        console.log("Last date of current week by starting with Sunday is: ", _src.lastDayOfWeek(null, _src.Weekday.Sunday)); //Sat Nov 19 2022
+    }
+    weekNumberExample() {
+        console.log("Current week number: ", _src.weekNumber()); //2022 Nov 14 ==> 46
+        console.log("15 February 2022 week number: ", _src.weekNumber(new Date(2022, 1, 15))); //2022 Feb 15 ==> 7
+        console.log("30 December 2019 week number: ", _src.weekNumber(new Date(2019, 11, 30))); //2019 Dec 30 (special case) ==> 1
     }
     constructor(){
         this.testString = "Hello @spfxappdev/utility";
     }
-}, _dec20 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "ayncFnExamples", [
-    _dec20
-], Object.getOwnPropertyDescriptor(_class2.prototype, "ayncFnExamples"), _class2.prototype), _dec21 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "cssClassesExamples", [
+}, _dec21 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "ayncFnExamples", [
     _dec21
-], Object.getOwnPropertyDescriptor(_class2.prototype, "cssClassesExamples"), _class2.prototype), _dec22 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "getDeepOrDefaultExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "ayncFnExamples"), _class2.prototype), _dec22 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "cssClassesExamples", [
     _dec22
-], Object.getOwnPropertyDescriptor(_class2.prototype, "getDeepOrDefaultExamples"), _class2.prototype), _dec23 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "getUrlParameterExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "cssClassesExamples"), _class2.prototype), _dec23 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "getDeepOrDefaultExamples", [
     _dec23
-], Object.getOwnPropertyDescriptor(_class2.prototype, "getUrlParameterExamples"), _class2.prototype), _dec24 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isFunctionExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "getDeepOrDefaultExamples"), _class2.prototype), _dec24 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "getUrlParameterExamples", [
     _dec24
-], Object.getOwnPropertyDescriptor(_class2.prototype, "isFunctionExamples"), _class2.prototype), _dec25 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isNullOrEmptyExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "getUrlParameterExamples"), _class2.prototype), _dec25 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isFunctionExamples", [
     _dec25
-], Object.getOwnPropertyDescriptor(_class2.prototype, "isNullOrEmptyExamples"), _class2.prototype), _dec26 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "issetExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "isFunctionExamples"), _class2.prototype), _dec26 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isNullOrEmptyExamples", [
     _dec26
-], Object.getOwnPropertyDescriptor(_class2.prototype, "issetExamples"), _class2.prototype), _dec27 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "issetDeepExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "isNullOrEmptyExamples"), _class2.prototype), _dec27 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "issetExamples", [
     _dec27
-], Object.getOwnPropertyDescriptor(_class2.prototype, "issetDeepExamples"), _class2.prototype), _dec28 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isValidEmailExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "issetExamples"), _class2.prototype), _dec28 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "issetDeepExamples", [
     _dec28
-], Object.getOwnPropertyDescriptor(_class2.prototype, "isValidEmailExamples"), _class2.prototype), _dec29 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "promiseQueueExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "issetDeepExamples"), _class2.prototype), _dec29 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "isValidEmailExamples", [
     _dec29
-], Object.getOwnPropertyDescriptor(_class2.prototype, "promiseQueueExamples"), _class2.prototype), _dec30 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "randomStringExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "isValidEmailExamples"), _class2.prototype), _dec30 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "promiseQueueExamples", [
     _dec30
-], Object.getOwnPropertyDescriptor(_class2.prototype, "randomStringExamples"), _class2.prototype), _dec31 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "replaceNonAlphanumericExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "promiseQueueExamples"), _class2.prototype), _dec31 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "randomStringExamples", [
     _dec31
-], Object.getOwnPropertyDescriptor(_class2.prototype, "replaceNonAlphanumericExamples"), _class2.prototype), _dec32 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "stripHTMLExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "randomStringExamples"), _class2.prototype), _dec32 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "replaceNonAlphanumericExamples", [
     _dec32
-], Object.getOwnPropertyDescriptor(_class2.prototype, "stripHTMLExamples"), _class2.prototype), _dec33 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "toBooleanExamples", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "replaceNonAlphanumericExamples"), _class2.prototype), _dec33 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "stripHTMLExamples", [
     _dec33
-], Object.getOwnPropertyDescriptor(_class2.prototype, "toBooleanExamples"), _class2.prototype), _dec34 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "replaceTplExample", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "stripHTMLExamples"), _class2.prototype), _dec34 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "toBooleanExamples", [
     _dec34
-], Object.getOwnPropertyDescriptor(_class2.prototype, "replaceTplExample"), _class2.prototype), _dec35 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "formatDateExample", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "toBooleanExamples"), _class2.prototype), _dec35 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "replaceTplExample", [
     _dec35
-], Object.getOwnPropertyDescriptor(_class2.prototype, "formatDateExample"), _class2.prototype), _dec36 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "wokdaysExample", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "replaceTplExample"), _class2.prototype), _dec36 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "removeAllUrlParametersExample", [
     _dec36
-], Object.getOwnPropertyDescriptor(_class2.prototype, "wokdaysExample"), _class2.prototype), _dec37 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "firstAndLastDateExample", [
+], Object.getOwnPropertyDescriptor(_class2.prototype, "removeAllUrlParametersExample"), _class2.prototype), _dec37 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "formatDateExample", [
     _dec37
-], Object.getOwnPropertyDescriptor(_class2.prototype, "firstAndLastDateExample"), _class2.prototype), _class2);
+], Object.getOwnPropertyDescriptor(_class2.prototype, "formatDateExample"), _class2.prototype), _dec38 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "wokdaysExample", [
+    _dec38
+], Object.getOwnPropertyDescriptor(_class2.prototype, "wokdaysExample"), _class2.prototype), _dec39 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "firstAndLastDateExample", [
+    _dec39
+], Object.getOwnPropertyDescriptor(_class2.prototype, "firstAndLastDateExample"), _class2.prototype), _dec40 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "firstAndLastWeekDateExample", [
+    _dec40
+], Object.getOwnPropertyDescriptor(_class2.prototype, "firstAndLastWeekDateExample"), _class2.prototype), _dec41 = _logger.log(), _helpers.applyDecoratedDescriptor(_class2.prototype, "weekNumberExample", [
+    _dec41
+], Object.getOwnPropertyDescriptor(_class2.prototype, "weekNumberExample"), _class2.prototype), _class2);
 let ClassesApp = (_class3 = class ClassesApp {
     start() {
         this.uriExample();
     }
     uriExample() {
-        const u1 = new _src.Uri("https://spfx-app.dev");
-        console.log(u1.toString()); //https://spfx-app.dev
+        const u1 = new _src.Uri("https://spfx-app.dev#firstAnchor#secondAnchor");
+        console.log(u1.toString()); //https://spfx-app.dev#firstAnchor#secondAnchor
         u1.Combine("/api/v1/user");
-        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user#secondAnchor
         u1.Parameters.add("page", "1");
         u1.Parameters.add("sort", "title");
-        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=1&sort=title
+        console.log(u1.toString()); //ttps://spfx-app.dev/api/v1/user?page=1&sort=title#secondAnchor
         u1.Parameters.remove("sort");
-        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=1
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=1#secondAnchor
         u1.Parameters.add("page", "2");
-        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=2
-        console.log(_src.randomString(32, "abcdef0123456789"));
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=2#secondAnchor
+        u1.Hash = "newAnchor";
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=2#newAnchor
     }
-}, _dec38 = _logger.log(), _helpers.applyDecoratedDescriptor(_class3.prototype, "uriExample", [
-    _dec38
+}, _dec42 = _logger.log(), _helpers.applyDecoratedDescriptor(_class3.prototype, "uriExample", [
+    _dec42
 ], Object.getOwnPropertyDescriptor(_class3.prototype, "uriExample"), _class3.prototype), _class3);
 class EventExample extends _src.EventListenerBase {
     Execute(name, lastEventResult, ...args) {
-        this.Result = args[0] + " and this text was added in Listener12";
+        if (name.Equals("exampleListener", true)) {
+            const text = _src.getDeepOrDefault(lastEventResult, "Result", args[0]);
+            this.Result = text + " and this text was added in Listener";
+        } else {
+            args[0] = "changed original";
+            this.Result = args[0];
+        }
         return this;
     }
 }
@@ -1185,16 +1237,19 @@ let EventListenerApp = (_class4 = class EventListenerApp {
     }
     registerEventListenerExample() {
         _src.EventHandler.Listen("exampleListener", new EventExample(), "uniqueEventId");
+        _src.EventHandler.Listen("exampleListener", new EventExample(), "abc");
+        _src.EventHandler.Listen("exampleListener2", new EventExample(), "uniqueEventId2");
     }
     fireEventExample() {
         console.log(_src.EventHandler.Fire("exampleListener", "This is a dummy event"));
+        console.log(_src.EventHandler.Fire("exampleListener", "This is a dummy event2"));
     }
-}, _dec39 = _logger.log(), _helpers.applyDecoratedDescriptor(_class4.prototype, "registerEventListenerExample", [
-    _dec39
-], Object.getOwnPropertyDescriptor(_class4.prototype, "registerEventListenerExample"), _class4.prototype), _dec40 = _logger.log(), _helpers.applyDecoratedDescriptor(_class4.prototype, "fireEventExample", [
-    _dec40
+}, _dec43 = _logger.log(), _helpers.applyDecoratedDescriptor(_class4.prototype, "registerEventListenerExample", [
+    _dec43
+], Object.getOwnPropertyDescriptor(_class4.prototype, "registerEventListenerExample"), _class4.prototype), _dec44 = _logger.log(), _helpers.applyDecoratedDescriptor(_class4.prototype, "fireEventExample", [
+    _dec44
 ], Object.getOwnPropertyDescriptor(_class4.prototype, "fireEventExample"), _class4.prototype), _class4);
-new ArrayApp().start();
+// new ArrayApp().start();
 new StringsApp().start();
 new FunctionsApp().start();
 new ClassesApp().start();
@@ -3427,155 +3482,26 @@ exports.default = replaceTpl;
 },{"./getDeepOrDefault":"9VIeB","./isFunction":"1GzP8","./isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"gEr3a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+var _stringExtensions = require("../extensions/StringExtensions");
+var _arrayExtensions = require("../extensions/ArrayExtensions");
 function removeAllParametersFromUrl(url) {
     if (typeof url !== 'string') return '';
-    return url.split('?')[0].split('&')[0].split('#')[0];
+    let urlCopy = url.slice();
+    if (urlCopy.Contains("#")) {
+        let splittedUrl = urlCopy.split('#');
+        do {
+            const hashValue = splittedUrl.LastOrDefault();
+            if (!urlCopy.EndsWith('#' + hashValue) || hashValue.Contains("?")) break;
+            splittedUrl.RemoveAt(-1, 1);
+            urlCopy = splittedUrl.join('#');
+            splittedUrl = urlCopy.split('#');
+        }while (splittedUrl.length > 1)
+    }
+    return urlCopy.split('?')[0].split('&')[0];
 }
 exports.default = removeAllParametersFromUrl;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"bR4DB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "countWorkdays", ()=>_countWorkdaysDefault.default
-);
-parcelHelpers.export(exports, "CountWorkdaysValues", ()=>_countWorkdays.CountWorkdaysValues
-);
-parcelHelpers.export(exports, "firstDayOfMonth", ()=>_firstDayOfMonthDefault.default
-);
-parcelHelpers.export(exports, "lastDayOfMonth", ()=>_lastDayOfMonthDefault.default
-);
-parcelHelpers.export(exports, "formatDate", ()=>_formatDateDefault.default
-);
-parcelHelpers.export(exports, "Weekday", ()=>_weekdayEnum.Weekday
-);
-var _countWorkdays = require("./countWorkdays");
-var _countWorkdaysDefault = parcelHelpers.interopDefault(_countWorkdays);
-var _firstDayOfMonth = require("./firstDayOfMonth");
-var _firstDayOfMonthDefault = parcelHelpers.interopDefault(_firstDayOfMonth);
-var _lastDayOfMonth = require("./lastDayOfMonth");
-var _lastDayOfMonthDefault = parcelHelpers.interopDefault(_lastDayOfMonth);
-var _formatDate = require("./formatDate");
-var _formatDateDefault = parcelHelpers.interopDefault(_formatDate);
-var _weekdayEnum = require("./Weekday.enum");
-
-},{"./countWorkdays":"dA47m","./firstDayOfMonth":"5ubaK","./lastDayOfMonth":"1vIpl","./formatDate":"gkmZM","./Weekday.enum":"04tdi","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"dA47m":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _firstDayOfMonth = require("./firstDayOfMonth");
-var _firstDayOfMonthDefault = parcelHelpers.interopDefault(_firstDayOfMonth);
-var _lastDayOfMonth = require("./lastDayOfMonth");
-var _lastDayOfMonthDefault = parcelHelpers.interopDefault(_lastDayOfMonth);
-var _arrayExtensions = require("../../extensions/ArrayExtensions");
-var _isNullOrEmpty = require("../isNullOrEmpty");
-var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
-function countWorkdays(startDate, endDate, fromWeekDay, toWeekDay, excludedDates) {
-    const defaultValues = {
-        startDate: _firstDayOfMonthDefault.default(),
-        endDate: _lastDayOfMonthDefault.default(startDate),
-        fromWeekDay: 1,
-        toWeekDay: 5,
-        excludedDates: []
-    };
-    const values = {
-        startDate: startDate || defaultValues.startDate,
-        endDate: endDate || defaultValues.endDate,
-        fromWeekDay: fromWeekDay || defaultValues.fromWeekDay,
-        toWeekDay: toWeekDay || defaultValues.toWeekDay,
-        excludedDates: excludedDates || defaultValues.excludedDates
-    };
-    let workday = 0;
-    let fromDate = new Date(values.startDate.toDateString());
-    let toDate = new Date(values.endDate.toDateString());
-    while(fromDate <= toDate){
-        const dayOfWeek = fromDate.getDay();
-        if (!(dayOfWeek >= values.fromWeekDay && dayOfWeek <= values.toWeekDay)) {
-            fromDate.setDate(fromDate.getDate() + 1);
-            continue;
-        }
-        if (!_isNullOrEmptyDefault.default(excludedDates) && excludedDates.Contains((excludedDate)=>{
-            const h = new Date(excludedDate.toDateString());
-            return h.getTime() == fromDate.getTime();
-        })) {
-            fromDate.setDate(fromDate.getDate() + 1);
-            continue;
-        }
-        fromDate.setDate(fromDate.getDate() + 1);
-        workday++;
-    }
-    return workday;
-}
-exports.default = countWorkdays;
-
-},{"./firstDayOfMonth":"5ubaK","./lastDayOfMonth":"1vIpl","../../extensions/ArrayExtensions":"5yfXX","../isNullOrEmpty":"9jyXv","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"5ubaK":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _isset = require("../isset");
-var _issetDefault = parcelHelpers.interopDefault(_isset);
-function firstDayOfMonth1(date) {
-    if (!_issetDefault.default(date)) date = new Date();
-    const firstDayOfMonth = new Date(date.toDateString());
-    firstDayOfMonth.setDate(1);
-    return firstDayOfMonth;
-}
-exports.default = firstDayOfMonth1;
-
-},{"../isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"1vIpl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _isset = require("../isset");
-var _issetDefault = parcelHelpers.interopDefault(_isset);
-function lastDayOfMonth1(date) {
-    if (!_issetDefault.default(date)) date = new Date();
-    const lastDayOfMonth = new Date(date.toDateString());
-    lastDayOfMonth.setMonth(lastDayOfMonth.getMonth() + 1);
-    lastDayOfMonth.setDate(0);
-    return lastDayOfMonth;
-}
-exports.default = lastDayOfMonth1;
-
-},{"../isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"gkmZM":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _isset = require("../isset");
-var _issetDefault = parcelHelpers.interopDefault(_isset);
-var _stringExtensions = require("../../extensions/StringExtensions");
-function formatDate(format, date) {
-    if (!_issetDefault.default(date)) date = new Date();
-    //YY and YYYY
-    const yyyy = date.getFullYear();
-    const yy = yyyy.toString().substring(2);
-    //MM or M
-    const M = date.getMonth() + 1;
-    const MM = M <= 9 ? `0${M}` : M.toString();
-    //d or dd
-    const d = date.getDate();
-    const dd = d <= 9 ? `0${d}` : d.toString();
-    //H or HH
-    const H = date.getHours();
-    const HH = H <= 9 ? `0${H}` : H.toString();
-    //m or mm
-    const m = date.getMinutes();
-    const mm = m <= 9 ? `0${m}` : m.toString();
-    //s or ss
-    const s = date.getSeconds();
-    const ss = s <= 9 ? `0${s}` : s.toString();
-    format = format.ReplaceAll("yyyy", yyyy.toString());
-    format = format.ReplaceAll("yy", yy);
-    format = format.ReplaceAll("MM", MM);
-    format = format.ReplaceAll("M", M.toString());
-    format = format.ReplaceAll("dd", dd);
-    format = format.ReplaceAll("d", d.toString());
-    format = format.ReplaceAll("HH", HH);
-    format = format.ReplaceAll("H", H.toString());
-    format = format.ReplaceAll("mm", mm);
-    format = format.ReplaceAll("m", m.toString());
-    format = format.ReplaceAll("ss", ss);
-    format = format.ReplaceAll("s", s.toString());
-    return format;
-}
-exports.default = formatDate;
-
-},{"../isset":"7dh4l","../../extensions/StringExtensions":"djiyg","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"djiyg":[function(require,module,exports) {
+},{"../extensions/StringExtensions":"djiyg","../extensions/ArrayExtensions":"5yfXX","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"djiyg":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 String.prototype.StartsWith = function(searchTerm, ignoreCase = true) {
@@ -3633,11 +3559,140 @@ String.prototype.IsEmpty = function() {
 };
 String.prototype.ReplaceAll = function(searchTerm, replaceWith) {
     let s = this.slice();
-    if (typeof this.replaceAll == "function") this.replaceAll(searchTerm, replaceWith);
+    if (typeof this.replaceAll == "function") return this.replaceAll(searchTerm, replaceWith);
     return s.replace(new RegExp(searchTerm, 'g'), replaceWith);
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"04tdi":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"bR4DB":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "countWorkdays", ()=>_countWorkdaysDefault.default
+);
+parcelHelpers.export(exports, "CountWorkdaysValues", ()=>_countWorkdays.CountWorkdaysValues
+);
+parcelHelpers.export(exports, "firstDayOfMonth", ()=>_firstDayOfMonthDefault.default
+);
+parcelHelpers.export(exports, "lastDayOfMonth", ()=>_lastDayOfMonthDefault.default
+);
+parcelHelpers.export(exports, "firstDayOfWeek", ()=>_firstDayOfWeekDefault.default
+);
+parcelHelpers.export(exports, "lastDayOfWeek", ()=>_lastDayOfWeekDefault.default
+);
+parcelHelpers.export(exports, "formatDate", ()=>_formatDateDefault.default
+);
+parcelHelpers.export(exports, "weekNumber", ()=>_weekNumberDefault.default
+);
+parcelHelpers.export(exports, "Weekday", ()=>_weekdayEnum.Weekday
+);
+var _countWorkdays = require("./countWorkdays");
+var _countWorkdaysDefault = parcelHelpers.interopDefault(_countWorkdays);
+var _firstDayOfMonth = require("./firstDayOfMonth");
+var _firstDayOfMonthDefault = parcelHelpers.interopDefault(_firstDayOfMonth);
+var _lastDayOfMonth = require("./lastDayOfMonth");
+var _lastDayOfMonthDefault = parcelHelpers.interopDefault(_lastDayOfMonth);
+var _firstDayOfWeek = require("./firstDayOfWeek");
+var _firstDayOfWeekDefault = parcelHelpers.interopDefault(_firstDayOfWeek);
+var _lastDayOfWeek = require("./lastDayOfWeek");
+var _lastDayOfWeekDefault = parcelHelpers.interopDefault(_lastDayOfWeek);
+var _formatDate = require("./formatDate");
+var _formatDateDefault = parcelHelpers.interopDefault(_formatDate);
+var _weekNumber = require("./weekNumber");
+var _weekNumberDefault = parcelHelpers.interopDefault(_weekNumber);
+var _weekdayEnum = require("./Weekday.enum");
+
+},{"./countWorkdays":"dA47m","./firstDayOfMonth":"5ubaK","./lastDayOfMonth":"1vIpl","./firstDayOfWeek":"hO5K5","./lastDayOfWeek":"4wKvk","./formatDate":"gkmZM","./weekNumber":"jer1o","./Weekday.enum":"04tdi","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"dA47m":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _firstDayOfMonth = require("./firstDayOfMonth");
+var _firstDayOfMonthDefault = parcelHelpers.interopDefault(_firstDayOfMonth);
+var _lastDayOfMonth = require("./lastDayOfMonth");
+var _lastDayOfMonthDefault = parcelHelpers.interopDefault(_lastDayOfMonth);
+var _arrayExtensions = require("../../extensions/ArrayExtensions");
+var _isNullOrEmpty = require("../isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+function countWorkdays(startDate, endDate, fromWeekDay, toWeekDay, excludedDates) {
+    const defaultValues = {
+        startDate: _firstDayOfMonthDefault.default(),
+        endDate: _lastDayOfMonthDefault.default(startDate),
+        fromWeekDay: 1,
+        toWeekDay: 5,
+        excludedDates: []
+    };
+    const values = {
+        startDate: startDate || defaultValues.startDate,
+        endDate: endDate || defaultValues.endDate,
+        fromWeekDay: fromWeekDay || defaultValues.fromWeekDay,
+        toWeekDay: toWeekDay || defaultValues.toWeekDay,
+        excludedDates: excludedDates || defaultValues.excludedDates
+    };
+    let workday = 0;
+    let fromDate = new Date(values.startDate.toDateString());
+    let toDate = new Date(values.endDate.toDateString());
+    while(fromDate <= toDate){
+        const dayOfWeek = fromDate.getDay();
+        if (!(dayOfWeek >= values.fromWeekDay && dayOfWeek <= values.toWeekDay)) {
+            fromDate.setDate(fromDate.getDate() + 1);
+            continue;
+        }
+        if (!_isNullOrEmptyDefault.default(excludedDates) && excludedDates.Contains((excludedDate)=>{
+            const h = new Date(excludedDate.toDateString());
+            return h.getTime() == fromDate.getTime();
+        })) {
+            fromDate.setDate(fromDate.getDate() + 1);
+            continue;
+        }
+        fromDate.setDate(fromDate.getDate() + 1);
+        workday++;
+    }
+    return workday;
+}
+exports.default = countWorkdays;
+
+},{"./firstDayOfMonth":"5ubaK","./lastDayOfMonth":"1vIpl","../../extensions/ArrayExtensions":"5yfXX","../isNullOrEmpty":"9jyXv","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"5ubaK":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+function firstDayOfMonth1(date) {
+    if (!_issetDefault.default(date)) date = new Date();
+    const firstDayOfMonth = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    firstDayOfMonth.setDate(1);
+    return firstDayOfMonth;
+}
+exports.default = firstDayOfMonth1;
+
+},{"../isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"1vIpl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+function lastDayOfMonth1(date) {
+    if (!_issetDefault.default(date)) date = new Date();
+    const lastDayOfMonth = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    lastDayOfMonth.setMonth(lastDayOfMonth.getMonth() + 1);
+    lastDayOfMonth.setDate(0);
+    return lastDayOfMonth;
+}
+exports.default = lastDayOfMonth1;
+
+},{"../isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"hO5K5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+var _weekdayEnum = require("./Weekday.enum");
+function firstDayOfWeek1(date, startDay = _weekdayEnum.Weekday.Monday) {
+    if (!_issetDefault.default(date)) date = new Date();
+    const firstDayOfWeek = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const day = firstDayOfWeek.getDay();
+    if (day == startDay) return firstDayOfWeek;
+    const diff = day >= startDay ? day - startDay : 7 - (startDay - day);
+    firstDayOfWeek.setDate(firstDayOfWeek.getDate() - diff);
+    return firstDayOfWeek;
+}
+exports.default = firstDayOfWeek1;
+
+},{"../isset":"7dh4l","./Weekday.enum":"04tdi","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"04tdi":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Weekday", ()=>Weekday1
@@ -3654,7 +3709,88 @@ var Weekday1;
 })(Weekday1 || (Weekday1 = {
 }));
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"ljGDl":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"4wKvk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+var _firstDayOfWeek = require("./firstDayOfWeek");
+var _firstDayOfWeekDefault = parcelHelpers.interopDefault(_firstDayOfWeek);
+var _weekdayEnum = require("./Weekday.enum");
+function lastDayOfWeek1(date, startDay = _weekdayEnum.Weekday.Monday) {
+    if (!_issetDefault.default(date)) date = new Date();
+    const lastDayOfWeek = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const firstDay = _firstDayOfWeekDefault.default(date, startDay);
+    lastDayOfWeek.setDate(firstDay.getDate() + 6);
+    return lastDayOfWeek;
+}
+exports.default = lastDayOfWeek1;
+
+},{"../isset":"7dh4l","./firstDayOfWeek":"hO5K5","./Weekday.enum":"04tdi","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"gkmZM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+var _isNullOrEmpty = require("../isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+var _stringExtensions = require("../../extensions/StringExtensions");
+function formatDate(format, date) {
+    if (_isNullOrEmptyDefault.default(format)) return '';
+    if (!_issetDefault.default(date)) date = new Date();
+    //yy and yyyy
+    const yyyy = date.getFullYear();
+    const yy = yyyy.toString().substring(2);
+    //MM or M
+    const M = date.getMonth() + 1;
+    const MM = M <= 9 ? `0${M}` : M.toString();
+    //d or dd
+    const d = date.getDate();
+    const dd = d <= 9 ? `0${d}` : d.toString();
+    //H or HH
+    const H = date.getHours();
+    const HH = H <= 9 ? `0${H}` : H.toString();
+    //m or mm
+    const m = date.getMinutes();
+    const mm = m <= 9 ? `0${m}` : m.toString();
+    //s or ss
+    const s = date.getSeconds();
+    const ss = s <= 9 ? `0${s}` : s.toString();
+    format = format.ReplaceAll("yyyy", yyyy.toString());
+    format = format.ReplaceAll("yy", yy);
+    format = format.ReplaceAll("MM", MM);
+    format = format.ReplaceAll("M", M.toString());
+    format = format.ReplaceAll("dd", dd);
+    format = format.ReplaceAll("d", d.toString());
+    format = format.ReplaceAll("HH", HH);
+    format = format.ReplaceAll("H", H.toString());
+    format = format.ReplaceAll("mm", mm);
+    format = format.ReplaceAll("m", m.toString());
+    format = format.ReplaceAll("ss", ss);
+    format = format.ReplaceAll("s", s.toString());
+    return format;
+}
+exports.default = formatDate;
+
+},{"../isset":"7dh4l","../isNullOrEmpty":"9jyXv","../../extensions/StringExtensions":"djiyg","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"jer1o":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("../isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+function weekNumber(date) {
+    if (!_issetDefault.default(date)) date = new Date();
+    const currentDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // If currentDate is Sunday, then calculate with -7 instead of 0
+    currentDate.setDate(currentDate.getDate() + 4 - (currentDate.getDay() || 7));
+    const firstJanuary = new Date(Date.UTC(currentDate.getFullYear(), 0, 1));
+    // Calculate full weeks to nearest Thursday
+    const weekNo = Math.ceil(((currentDate.getTime() - firstJanuary.getTime()) / 86400000 + 1) / 7);
+    // Return array of year and week number
+    return weekNo;
+}
+exports.default = weekNumber;
+
+},{"../isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"ljGDl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _functions = require("./functions");
@@ -3679,6 +3815,7 @@ parcelHelpers.export(exports, "Uri", ()=>Uri
 );
 var _functions = require("../functions");
 var _arrayExtensions = require("../extensions/ArrayExtensions");
+var _stringExtensions = require("../extensions/StringExtensions");
 class UrlParameter {
     constructor(query){
         this.Query = query;
@@ -3745,13 +3882,17 @@ class UrlParameter {
     }
 }
 class Uri {
+    get hash() {
+        return _functions.isNullOrEmpty(this.Hash) ? '' : `#${this.Hash}`;
+    }
     constructor(url){
         this.OriginalUrl = url;
+        this.Hash = this.getHash(url);
+        if (!_functions.isNullOrEmpty(this.hash)) url = url.replace(this.hash, '');
         this.createUrlContext(url);
-        this.Parameters = new UrlParameter("");
     }
     toString() {
-        return this.Url;
+        return this.Url.Contains(this.hash) ? this.Url : this.Url + this.hash;
     }
     Combine(urlToCombine) {
         const absoluteUrl = this.makeAbsoluteUrl(urlToCombine);
@@ -3823,9 +3964,18 @@ class Uri {
         const webUrl = this.getWebUrl(url8);
         return url8.replace(webUrl, '');
     }
+    getHash(url9) {
+        let urlCopy = url9.slice();
+        let hashValue = "";
+        if (!urlCopy.Contains("#")) return hashValue;
+        let splittedUrl = urlCopy.split('#');
+        hashValue = splittedUrl.LastOrDefault();
+        if (!urlCopy.EndsWith('#' + hashValue) || hashValue.Contains("?")) hashValue = "";
+        return hashValue;
+    }
 }
 
-},{"../functions":"9XwLJ","../extensions/ArrayExtensions":"5yfXX","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"cr8Pc":[function(require,module,exports) {
+},{"../functions":"9XwLJ","../extensions/ArrayExtensions":"5yfXX","../extensions/StringExtensions":"djiyg","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"cr8Pc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventHandler", ()=>_eventHandler.EventHandler
@@ -3848,7 +3998,6 @@ var _functions = require("../functions");
 var _arrayExtensions = require("../extensions/ArrayExtensions");
 class EventHandler {
     static Listen(name, listener1, uniqueEventId) {
-        console.log("SSC bli bla blub");
         if (_functions.isNullOrEmpty(uniqueEventId)) uniqueEventId = _functions.randomString(32, "abcdef0123456789");
         if (EventHandler.allUniqueEventIds.IndexOf((id)=>id.Equals(uniqueEventId, true)
         ) >= 0) return;

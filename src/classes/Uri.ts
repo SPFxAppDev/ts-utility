@@ -1,5 +1,6 @@
 import { getUrlParameter, isNullOrEmpty, removeAllParametersFromUrl } from "../functions";
 import '../extensions/ArrayExtensions';
+import '../extensions/StringExtensions';
 
 export interface IUrlParameter {
     Key: string; // 'foo',
@@ -130,16 +131,27 @@ export class Uri implements IUrlContext {
     public Query: string;
     public Parameters: UrlParameter;
     public Protocol: string;
+    public Hash: string;
+
     protected SplittedUrl: string[];
+
+    protected get hash(): string {
+        return isNullOrEmpty(this.Hash) ? '' : `#${this.Hash}`;
+    }
 
     public constructor(url: string) {
         this.OriginalUrl = url;
+        this.Hash = this.getHash(url);
+        
+        if(!isNullOrEmpty(this.hash)) {
+            url = url.replace(this.hash, '');
+        }
+
         this.createUrlContext(url);
-        this.Parameters = new UrlParameter("");
     }
 
     public toString(): string {
-        return this.Url;
+        return this.Url.Contains(this.hash) ? this.Url : this.Url + this.hash;
     }
 
     public Combine(urlToCombine: string): void {
@@ -241,6 +253,24 @@ export class Uri implements IUrlContext {
     protected getQuery(url: string): string {
         const webUrl: string = this.getWebUrl(url);
         return url.replace(webUrl, '');
+    }
+
+    protected getHash(url: string): string {
+        let urlCopy = url.slice();
+        let hashValue = "";
+        if(!urlCopy.Contains("#")) {
+            return hashValue;            
+        }
+
+        let splittedUrl = urlCopy.split('#');
+
+        hashValue = splittedUrl.LastOrDefault();
+
+        if(!urlCopy.EndsWith('#' + hashValue) || hashValue.Contains("?")) {
+            hashValue = "";
+        }
+
+        return hashValue;
     }
 
 }

@@ -164,7 +164,7 @@ String.prototype.ReplaceAll = function(this: string, searchTerm: string, replace
 
 
     if(typeof (this as any).replaceAll == "function") {
-        (this as any).replaceAll(searchTerm, replaceWith);
+        return (this as any).replaceAll(searchTerm, replaceWith);
     }
     
     return s.replace(new RegExp(searchTerm, 'g'), replaceWith);
