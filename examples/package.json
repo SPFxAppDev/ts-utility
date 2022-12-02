@@ -9,7 +9,8 @@
   "source": " src/index.html",
   "scripts": {
     "dev": "parcel src/index.html --out-dir build/debug",
-    "build": "parcel build"
+    "build": "parcel build",
+    "serve": "parcel src/index.html"
   },
   "name": "npm",
   "version": "1.0.0",

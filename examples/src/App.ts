@@ -1,7 +1,7 @@
 
 import '../../src/extensions/ArrayExtensions';
 import '../../src/extensions/StringExtensions';
-import { asyncFn, randomString, cssClasses, getDeepOrDefault, getUrlParameter, isFunction, isNullOrEmpty, isset, issetDeep, isValidEmail, promiseQueue, PromiseQueue, toParameterlessPromiseQueueFunc, replaceNonAlphanumeric, stripHTML, toBoolean } from '../../src';
+import { asyncFn, randomString, cssClasses, getDeepOrDefault, getUrlParameter, isFunction, isNullOrEmpty, isset, issetDeep, isValidEmail, promiseQueue, PromiseQueue, toParameterlessPromiseQueueFunc, replaceNonAlphanumeric, stripHTML, toBoolean, replaceTpl, formatDate, countWorkdays, firstDayOfMonth, lastDayOfMonth, Uri, Weekday, EventHandler, EventListenerBase, IEventListener, IEventListenerResult, removeAllParametersFromUrl, weekNumber, lastDayOfWeek, firstDayOfWeek } from '../../src';
 import { log } from '@spfxappdev/logger';
 
 interface ISimpleItem {
@@ -274,6 +274,7 @@ class StringsApp {
     //    this.insertExamples();
     //    this.equalsExamples();
     //    this.isEmptyExamples();
+    this.replaceAllExamples();
     }
 
     @log()
@@ -323,6 +324,13 @@ class StringsApp {
         console.log(`"".IsEmpty() ==> `, "".IsEmpty());
         console.log(`"     ".IsEmpty() ==> `, "     ".IsEmpty());
     }
+
+    @log()
+    private replaceAllExamples(): void {
+        console.log(`"Helloo Woorld, welcoome too string extensioons".ReplaceAll() ==> `, "Helloo Woorld, welcoome too string extensioons".ReplaceAll("oo", "o")); //Hello World, welcome to string extensions
+        console.log(`"".IsEmpty() ==> `, "".IsEmpty());
+        console.log(`"     ".IsEmpty() ==> `, "     ".IsEmpty());
+    }
 }
 
 class FunctionsApp {
@@ -337,14 +345,20 @@ class FunctionsApp {
         // this.isFunctionExamples();
         // this.isNullOrEmptyExamples();
         // this.issetExamples();
-        this.issetDeepExamples();
+        // this.issetDeepExamples();
         // this.isValidEmailExamples();
         // this.promiseQueueExamples();
         // this.randomStringExamples();
         // this.replaceNonAlphanumericExamples();
         // this.stripHTMLExamples();
         // this.toBooleanExamples();
-
+        this.replaceTplExample();
+        this.removeAllUrlParametersExample();
+        this.formatDateExample();
+        this.wokdaysExample();
+        this.firstAndLastDateExample();
+        this.weekNumberExample();
+        this.firstAndLastWeekDateExample();
     }
 
     private dummyPromise(success: boolean = true, delay = 5000): Promise<string> {
@@ -508,8 +522,6 @@ class FunctionsApp {
 
     }
 
-    
-
     @log()
     private async  promiseQueueExamples(): Promise<void> {
         
@@ -613,9 +625,141 @@ class FunctionsApp {
         console.log(`toBoolean("") ==> `, toBoolean(""));
     }
 
+    @log()
+    private replaceTplExample(): void {
+        console.log(replaceTpl("Hello {UserName}. Welcome {UserName}, this placeholder is not available: {SPFxAppDev}", { UserName: "SPFxAppDev" }));
+        //Hello SPFxAppDev. Welcome SPFxAppDev, this placeholder is not available: {SPFxAppDev}
+
+        console.log(replaceTpl("Hello {User.FirstName} {User.LastName}, last login: {User.LastLogin}", { User: { FirstName: "SPFxApp", LastName: "Dev", LastLogin: () => { return new Date().toString(); } } }));
+        //Hello SPFxApp Dev, last login: Tue Nov 15 2022 15:59:34 GMT+0100 (Central European Standard Time)
+
+        console.log(replaceTpl("Hello {404}", { User: { FirstName: "SPFxApp", LastName: "Dev" } }, ""));
+        //Hello 
+    }
+
+    @log()
+    private removeAllUrlParametersExample(): void {
+        console.log(removeAllParametersFromUrl("https://spfx-app.dev#firstAnchor#secondAnchor")); 
+        //removeAllParametersFromUrl("https://spfx-app.dev#firstAnchor#secondAnchor")
+
+        console.log(removeAllParametersFromUrl("https://spfx-app.dev/path1/path2?param1=1&param2=2#firstAnchor#secondAnchor"));
+        //https://spfx-app.dev/path1/path2
+
+        console.log(removeAllParametersFromUrl("https://spfx-app.dev/#/routedpath"));
+        //https://spfx-app.dev/
+    }
+
+    @log()
+    private formatDateExample(): void {
+        console.log(formatDate("dd.MM.yyyy")); //Now ==> 14.11.2022
+        console.log(formatDate("MM/dd/yyyy", new Date(2022, 1, 1))); //result: 02/01/2022
+        console.log(formatDate("M/d/yy", new Date(2022, 1, 1))); // result: 2/1/22
+
+    }
+
+    @log()
+    private wokdaysExample(): void {
+        console.log(countWorkdays()); //workdays in November 2022, Monday-Friday ==> 22
+        console.log(countWorkdays(new Date(2022, 10, 14))); //workdays from 14th November 2022 until end of month, Monday-Friday ==> 13
+        console.log(countWorkdays(new Date(2022, 10, 14), new Date(2022, 10, 20))); //workdays from 14th November 2022 until 20th Nov 2022, Monday-Friday ==> 5
+        console.log(countWorkdays(undefined, undefined, 1, Weekday.Saturday)); //workdays in November 2022, Monday-Saturday ==> 26
+        console.log(countWorkdays(new Date(2022, 11, 1), undefined, undefined, undefined, [new Date(2022, 11, 24), new Date(2022, 11, 25), new Date(2022, 11, 26), new Date(2022, 11, 31)])); //workdays in December 2022, Monday-Friday and day off (24-26th + 31st) ==> 21
+    }
+
+    @log()
+    private firstAndLastDateExample(): void {
+        console.log("First date of current month is: ", firstDayOfMonth()); //Tue Nov 01 2022
+        console.log("Last date of current month is: ", lastDayOfMonth()); //Wed Nov 30 2022
+        console.log("First date of 15 February 2022 is: ", firstDayOfMonth(new Date(2022, 1, 15))); //Tue Feb 01 2022
+        console.log("Last date of 15 February 2022 is: ", lastDayOfMonth(new Date(2022, 1, 15))); //Mon Feb 28 2022
+    }
+
+    @log()
+    private firstAndLastWeekDateExample(): void {
+        console.log("First date of current week is: ", firstDayOfWeek()); //Mon Nov 14 2022
+        console.log("Last date of current week is: ", lastDayOfWeek()); //Sun Nov 20 2022
+        console.log("First date of week of 15 February 2022 is: ", firstDayOfWeek(new Date(2022, 1, 15))); //Mon Feb 14 2022
+        console.log("Last date of week of 15 February 2022 is: ", lastDayOfWeek(new Date(2022, 1, 15))); //Sun Feb 20 2022
+        console.log("First date of current week by starting with Sunday is: ", firstDayOfWeek(null, Weekday.Sunday)); //Sun Nov 13 2022
+        console.log("Last date of current week by starting with Sunday is: ", lastDayOfWeek(null, Weekday.Sunday)); //Sat Nov 19 2022
+    }
+
+    @log()
+    private weekNumberExample(): void {
+        console.log("Current week number: ", weekNumber()); //2022 Nov 14 ==> 46
+        console.log("15 February 2022 week number: ", weekNumber(new Date(2022, 1, 15))); //2022 Feb 15 ==> 7
+        console.log("30 December 2019 week number: ", weekNumber(new Date(2019, 11, 30))); //2019 Dec 30 (special case) ==> 1
+    }
+
     
 }
 
-new ArrayApp().start();
+class ClassesApp {
+
+    public start(): void {
+        this.uriExample();
+    }
+
+    @log()
+    private uriExample(): void {
+        const u1 = new Uri("https://spfx-app.dev#firstAnchor#secondAnchor");
+        console.log(u1.toString()); //https://spfx-app.dev#firstAnchor#secondAnchor
+        u1.Combine("/api/v1/user");
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user#secondAnchor
+        u1.Parameters.add("page", "1");
+        u1.Parameters.add("sort", "title");
+        console.log(u1.toString()); //ttps://spfx-app.dev/api/v1/user?page=1&sort=title#secondAnchor
+        u1.Parameters.remove("sort");
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=1#secondAnchor
+        u1.Parameters.add("page", "2");
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=2#secondAnchor
+        u1.Hash = "newAnchor";
+        console.log(u1.toString()); //https://spfx-app.dev/api/v1/user?page=2#newAnchor
+    }
+}
+
+class EventExample extends EventListenerBase {
+    public Execute(name: string, lastEventResult: IEventListenerResult, ...args: any[]): IEventListenerResult {
+
+        if(name.Equals("exampleListener", true)) {
+            const text = getDeepOrDefault<string>(lastEventResult, "Result", args[0]);
+            this.Result = text + " and this text was added in Listener";
+        }
+        else {
+            args[0] = "changed original";
+            this.Result = args[0];
+        }
+
+        
+        return this;
+    }
+}
+
+class EventListenerApp {
+    public start(): void {
+        this.registerEventListenerExample();
+        this.fireEventExample();    
+    }
+
+    @log()
+    private registerEventListenerExample(): void {
+        EventHandler.Listen("exampleListener", new EventExample(), "uniqueEventId");
+        EventHandler.Listen("exampleListener", new EventExample(), "abc");
+        EventHandler.Listen("exampleListener2", new EventExample(), "uniqueEventId2");
+        
+    }
+
+    @log()
+    private fireEventExample(): void {
+        console.log(EventHandler.Fire("exampleListener", "This is a dummy event"));
+        console.log(EventHandler.Fire("exampleListener", "This is a dummy event2"));
+    }
+
+
+}
+
+// new ArrayApp().start();
 new StringsApp().start();
 new FunctionsApp().start();
+new ClassesApp().start();
+new EventListenerApp().start();
