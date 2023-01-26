@@ -3328,9 +3328,9 @@ exports.default = toBoolean;
 },{"./isset":"7dh4l","@parcel/transformer-js/src/esmodule-helpers.js":"lKO5T"}],"knIu2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-async function asyncFn(promiseFn) {
+async function asyncFn(promiseFn, ...promiseFnArgs) {
     try {
-        const r = await promiseFn;
+        const r = await promiseFn(...promiseFnArgs);
         return [
             r,
             null
@@ -3626,8 +3626,8 @@ function countWorkdays(startDate, endDate, fromWeekDay, toWeekDay, excludedDates
         excludedDates: excludedDates || defaultValues.excludedDates
     };
     let workday = 0;
-    let fromDate = new Date(values.startDate.toDateString());
-    let toDate = new Date(values.endDate.toDateString());
+    let fromDate = new Date(Date.UTC(values.startDate.getFullYear(), values.startDate.getMonth(), values.startDate.getDate()));
+    let toDate = new Date(Date.UTC(values.endDate.getFullYear(), values.endDate.getMonth(), values.endDate.getDate()));
     while(fromDate <= toDate){
         const dayOfWeek = fromDate.getDay();
         if (!(dayOfWeek >= values.fromWeekDay && dayOfWeek <= values.toWeekDay)) {
@@ -3635,7 +3635,7 @@ function countWorkdays(startDate, endDate, fromWeekDay, toWeekDay, excludedDates
             continue;
         }
         if (!_isNullOrEmptyDefault.default(excludedDates) && excludedDates.Contains((excludedDate)=>{
-            const h = new Date(excludedDate.toDateString());
+            const h = new Date(Date.UTC(excludedDate.getFullYear(), excludedDate.getMonth(), excludedDate.getDate()));
             return h.getTime() == fromDate.getTime();
         })) {
             fromDate.setDate(fromDate.getDate() + 1);
