@@ -1,7 +1,18 @@
 
 import '../../src/extensions/ArrayExtensions';
 import '../../src/extensions/StringExtensions';
-import { asyncFn, randomString, cssClasses, getDeepOrDefault, getUrlParameter, isFunction, isNullOrEmpty, isset, issetDeep, isValidEmail, promiseQueue, PromiseQueue, toParameterlessPromiseQueueFunc, replaceNonAlphanumeric, stripHTML, toBoolean, replaceTpl, formatDate, countWorkdays, firstDayOfMonth, lastDayOfMonth, Uri, Weekday, EventHandler, EventListenerBase, IEventListener, IEventListenerResult, removeAllParametersFromUrl, weekNumber, lastDayOfWeek, firstDayOfWeek } from '../../src';
+import { asyncFn, randomString, cssClasses, getDeepOrDefault, 
+        getUrlParameter, isFunction, isNullOrEmpty, 
+        isset, issetDeep, isValidEmail, promiseQueue, 
+        PromiseQueue, toParameterlessPromiseQueueFunc, 
+        replaceNonAlphanumeric, stripHTML, toBoolean, 
+        replaceTpl, formatDate, countWorkdays, 
+        firstDayOfMonth, lastDayOfMonth, 
+        Uri, Weekday, EventHandler, EventListenerBase, 
+        IEventListener, IEventListenerResult, 
+        removeAllParametersFromUrl, weekNumber, 
+        lastDayOfWeek, firstDayOfWeek,
+        copyToClipboard, isAnyNullOrEmpty, isAnySet } from '../../src';
 import { log } from '@spfxappdev/logger';
 
 interface ISimpleItem {
@@ -352,13 +363,20 @@ class FunctionsApp {
         // this.replaceNonAlphanumericExamples();
         // this.stripHTMLExamples();
         // this.toBooleanExamples();
-        this.replaceTplExample();
-        this.removeAllUrlParametersExample();
-        this.formatDateExample();
-        this.wokdaysExample();
-        this.firstAndLastDateExample();
-        this.weekNumberExample();
-        this.firstAndLastWeekDateExample();
+        // this.replaceTplExample();
+        // this.removeAllUrlParametersExample();
+        // this.formatDateExample();
+        // this.wokdaysExample();
+        // this.firstAndLastDateExample();
+        // this.weekNumberExample();
+        // this.firstAndLastWeekDateExample();
+        this.isAnySetExample();
+        this.isAnyNullOrEmptyExample();
+
+        const btn = document.getElementById("copyBtn");
+        btn?.addEventListener("click", () => {
+            this.copyToClipboardExample();
+        });
     }
 
     private dummyPromise(success: boolean = true, delay = 5000): Promise<string> {
@@ -691,6 +709,28 @@ class FunctionsApp {
         console.log("30 December 2019 week number: ", weekNumber(new Date(2019, 11, 30))); //2019 Dec 30 (special case) ==> 1
     }
 
+    @log()
+    private async copyToClipboardExample(): Promise<void> {
+        //await copyToClipboard("Hello from clipboard");
+        await window.navigator.clipboard.writeText("Hello from clipboard");
+    }
+
+    @log()
+    private isAnySetExample(): void {
+        let a;
+        console.log(isAnySet(undefined, null, a, "hello"));
+        console.log(isAnySet(undefined, null, a));
+    }
+
+    @log()
+    private isAnyNullOrEmptyExample(): void {
+        let a;
+        console.log(isAnyNullOrEmpty(undefined, null, a, "hello"));
+        console.log(isAnyNullOrEmpty(undefined, null, a));
+        a = "world";
+        console.log(isAnyNullOrEmpty("hello", a));
+    }
+
     
 }
 
@@ -759,7 +799,7 @@ class EventListenerApp {
 }
 
 // new ArrayApp().start();
-new StringsApp().start();
+// new StringsApp().start();
 new FunctionsApp().start();
-new ClassesApp().start();
-new EventListenerApp().start();
+// new ClassesApp().start();
+// new EventListenerApp().start();
