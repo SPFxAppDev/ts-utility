@@ -3,14 +3,13 @@
   "devDependencies": {
     "@spfxappdev/utility": "latest",
     "@spfxappdev/logger": "latest",
-    "parcel-bundler": "latest",
+    "parcel": "^2.8.3",
     "typescript": "^4.3.5"
   },
   "source": " src/index.html",
   "scripts": {
-    "dev": "parcel src/index.html --out-dir build/debug",
-    "build": "parcel build",
-    "serve": "parcel src/index.html"
+    "preserve": "rimraf ./.parcel-cache && rimraf ./.cache",
+    "serve": "parcel serve src/index.html"
   },
   "name": "npm",
   "version": "1.0.0",

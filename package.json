@@ -1,12 +1,13 @@
 {
   "name": "@spfxappdev/utility",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
+  "type": "module",
   "scripts": {
     "prepublish": "tsc"
   },

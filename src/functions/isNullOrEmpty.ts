@@ -16,7 +16,7 @@ export default function isNullOrEmpty(property: any): boolean {
         return property.trim().length < 1;
     }
 
-    if (!property.hasOwnProperty('length')) {
+    if (typeof property.length !== 'number') {
         return false;
     }
 

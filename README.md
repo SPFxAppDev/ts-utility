@@ -5,7 +5,10 @@
 This package contains some useful extensions for `String` and `Array` and some more functions that need less lines of code and make the code more readable. [You can find the "nicer" and more user-friendly documentation here](https://spfxappdev.github.io/ts-utility/)
 
 - [Functions](#functions)
+  * [allAreNullOrEmpty](#allarenullorempty)
+  * [allAreSet](#allareset)
   * [asyncFn](#asyncfn)
+  * [copyToClipboard](#copytoclipboard)
   * [countWorkdays](#countworkdays)
   * [cssClasses](#cssclasses)
   * [firstDayOfMonth](#firstdayofmonth)
@@ -13,6 +16,8 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [formatDate](#formatdate)
   * [getDeepOrDefault](#getdeepordefault)
   * [getUrlParameter](#geturlparameter)
+  * [isAnyNullOrEmpty](#isanynullorempty)
+  * [isAnySet](#isanyset)
   * [isFunction](#isfunction)
   * [isNullOrEmpty](#isnullorempty)
   * [isset](#isset)
@@ -71,7 +76,10 @@ import { isset } from '@spfxappdev/utility';
 
 ### API
 
+- [allAreNullOrEmpty](#allarenullorempty)
+- [allAreSet](#allareset)
 - [asyncFn](#asyncfn)
+- [copyToClipboard](#copytoclipboard)
 - [countWorkdays](#countworkdays)
 - [cssClasses](#cssclasses)
 - [firstDayOfMonth](#firstdayofmonth)
@@ -79,6 +87,8 @@ import { isset } from '@spfxappdev/utility';
 - [formatDate](#formatdate)
 - [getDeepOrDefault](#getdeepordefault)
 - [getUrlParameter](#geturlparameter)
+- [isAnyNullOrEmpty](#isanynullorempty)
+- [isAnySet](#isanyset)
 - [isFunction](#isfunction)
 - [isNullOrEmpty](#isnullorempty)
 - [isset](#isset)
@@ -94,6 +104,57 @@ import { isset } from '@spfxappdev/utility';
 - [stripHTML](#striphtml)
 - [toBoolean](#toboolean)
 - [weekNumber](#weeknumber)
+
+___
+
+#### allAreNullOrEmpty
+
+![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
+
+Determines if all of the the provided properties are `null`, `undefined`, or empty (or whitespace if string-value).
+
+##### Examples
+
+```typescript
+import { allAreNullOrEmpty } from '@spfxappdev/utility';
+
+const emptyArr = []; //EMPTY
+const obj = {}; //NOT null, undefined or empty
+const notEmptyString = 'not empty';
+const emptyString = '      '; // With whitespace
+
+allAreNullOrEmpty(obj, notEmptyString); //false
+allAreNullOrEmpty(emptyArr, emptyString); // true
+allAreNullOrEmpty(obj, emptyString); // false
+allAreNullOrEmpty(emptyArr, emptyString, obj, notEmptyString); // false
+```
+___
+
+#### allAreSet
+
+![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
+
+Determines if all of the the provided properties are set. (Not `null` or `undefined`)
+
+##### Examples
+
+```typescript
+import { allAreSet } from '@spfxappdev/utility';
+
+const emptyArr = []; //EMPTY
+const obj = {}; //NOT null, undefined or empty
+const notEmptyString = 'not empty';
+const emptyString = '      '; // With whitespace
+let notSet;
+
+allAreSet(obj) // true
+allAreSet(emptyArr, emptyString); // true
+allAreSet(obj, notEmptyString); //true
+allAreSet(obj, emptyString); // true
+allAreSet(obj, emptyString, notSet); // false
+allAreSet(emptyString, undefined, null); //false
+```
+___
 
 #### asyncFn 
 
@@ -133,6 +194,25 @@ console.log(result);
 //Do things with result
 ```
 ___
+
+
+#### copyToClipboard
+
+![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
+
+Writes the specified TEXT string to the system clipboard
+
+> Important: A DOM element must be in focus (e.g. click a button, focus a text box, etc.). You cannot simply paste text into the clipboard without the document being focused.
+
+##### Examples
+
+```typescript
+import { copyToClipboard } from '@spfxappdev/utility';
+
+copyToClipboard(document.getElementById('myTxtBox').value);
+```
+___
+
 
 #### cssClasses
 
@@ -216,6 +296,55 @@ getUrlParameter('myParam2', 'https://spfx-app.dev?myParam=1');  // => null
 getUrlParameter('myParam2');  // => Using window.location.href as URL
 ```
 ___
+
+#### isAnyNullOrEmpty
+
+![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
+
+Determines if any of the the provided properties are `null`, `undefined`, or empty (or whitespace if string-value).
+
+##### Examples
+
+```typescript
+import { isAnyNullOrEmpty } from '@spfxappdev/utility';
+
+const emptyArr = []; //EMPTY
+const obj = {}; //NOT null, undefined or empty
+const notEmptyString = 'not empty';
+const emptyString = '      '; // With whitespace
+
+isAnyNullOrEmpty(obj, notEmptyString); //false
+isAnyNullOrEmpty(obj, emptyString); // true
+isAnyNullOrEmpty(emptyArr, emptyString, obj, notEmptyString); // true
+```
+___
+
+#### isAnySet
+
+![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
+
+Determines if any of the the provided properties are set (not null or undefined).
+
+##### Examples
+
+```typescript
+import { isAnySet } from '@spfxappdev/utility';
+
+const emptyArr = []; //EMPTY
+const obj = {}; //NOT null, undefined or empty
+const notEmptyString = 'not empty';
+const emptyString = '      '; // With whitespace
+let notSet;
+
+isAnySet(obj) // true
+isAnySet(emptyArr, emptyString); // true
+isAnySet(obj, notEmptyString); //true
+isAnySet(undefined, emptyString); // true
+isAnySet(obj, null, notSet); // true
+isAnySet(notSet, undefined, null); //false
+```
+___
+
 
 #### isFunction
 
