@@ -953,6 +953,8 @@ class FunctionsApp {
         // this.firstAndLastWeekDateExample();
         this.isAnySetExample();
         this.isAnyNullOrEmptyExample();
+        this.allAreSetExample();
+        this.allAreNullOrEmptyExample();
         const btn = document.getElementById("copyBtn");
         btn?.addEventListener("click", ()=>{
             this.copyToClipboardExample();
@@ -1245,7 +1247,8 @@ class FunctionsApp {
     }
     async copyToClipboardExample() {
         //await copyToClipboard("Hello from clipboard");
-        await window.navigator.clipboard.writeText("Hello from clipboard");
+        let inputField = document.getElementById("copyInput");
+        await window.navigator.clipboard.writeText(inputField.value);
     }
     isAnySetExample() {
         let a;
@@ -1258,6 +1261,18 @@ class FunctionsApp {
         console.log((0, _src.isAnyNullOrEmpty)(undefined, null, a));
         a = "world";
         console.log((0, _src.isAnyNullOrEmpty)("hello", a));
+    }
+    allAreSetExample() {
+        let a;
+        console.log((0, _src.allAreSet)("", true, "hello"));
+        console.log((0, _src.allAreSet)("", "hello", undefined, null, a));
+    }
+    allAreNullOrEmptyExample() {
+        let a;
+        console.log((0, _src.allAreNullOrEmpty)(undefined, null, a, "hello"));
+        console.log((0, _src.allAreNullOrEmpty)(undefined, null, a, [], ""));
+        a = "world";
+        console.log((0, _src.allAreNullOrEmpty)("hello", a));
     }
 }
 (0, _tsDecorateMjsDefault.default)([
@@ -1332,6 +1347,12 @@ class FunctionsApp {
 (0, _tsDecorateMjsDefault.default)([
     (0, _logger.log)()
 ], FunctionsApp.prototype, "isAnyNullOrEmptyExample", null);
+(0, _tsDecorateMjsDefault.default)([
+    (0, _logger.log)()
+], FunctionsApp.prototype, "allAreSetExample", null);
+(0, _tsDecorateMjsDefault.default)([
+    (0, _logger.log)()
+], FunctionsApp.prototype, "allAreNullOrEmptyExample", null);
 class ClassesApp {
     start() {
         this.uriExample();
@@ -2040,6 +2061,8 @@ if (!(0, _functions.isset)(Array.prototype.RemoveAt)) Object.defineProperty(Arra
 },{"../functions":"fZyL3"}],"fZyL3":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "allAreNullOrEmpty", ()=>(0, _allAreNullOrEmptyDefault.default));
+parcelHelpers.export(exports, "allAreSet", ()=>(0, _allAreSetDefault.default));
 parcelHelpers.export(exports, "arrayFrom", ()=>(0, _arrayFromDefault.default));
 parcelHelpers.export(exports, "copyToClipboard", ()=>(0, _copyToClipboardDefault.default));
 parcelHelpers.export(exports, "cssClasses", ()=>(0, _cssClassesDefault.default));
@@ -2063,6 +2086,10 @@ parcelHelpers.export(exports, "replaceNonAlphanumeric", ()=>(0, _replaceNonAlpha
 parcelHelpers.export(exports, "stripHTML", ()=>(0, _stripHTMLDefault.default));
 parcelHelpers.export(exports, "replaceTpl", ()=>(0, _replaceTplDefault.default));
 parcelHelpers.export(exports, "removeAllParametersFromUrl", ()=>(0, _removeAllParametersFromUrlDefault.default));
+var _allAreNullOrEmpty = require("./allAreNullOrEmpty");
+var _allAreNullOrEmptyDefault = parcelHelpers.interopDefault(_allAreNullOrEmpty);
+var _allAreSet = require("./allAreSet");
+var _allAreSetDefault = parcelHelpers.interopDefault(_allAreSet);
 var _arrayFrom = require("./arrayFrom");
 var _arrayFromDefault = parcelHelpers.interopDefault(_arrayFrom);
 var _copyToClipboard = require("./copyToClipboard");
@@ -2108,7 +2135,63 @@ var _removeAllParametersFromUrlDefault = parcelHelpers.interopDefault(_removeAll
 var _date = require("./date");
 parcelHelpers.exportAll(_date, exports);
 
-},{"./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"azDo8":[function(require,module,exports) {
+},{"./allAreNullOrEmpty":"jJKZA","./allAreSet":"b5HIJ","./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"jJKZA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isNullOrEmpty = require("./isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+function allAreNullOrEmpty(...args) {
+    let returnValue = true;
+    for (let arg of args)if (!(0, _isNullOrEmptyDefault.default)(arg)) {
+        returnValue = false;
+        break;
+    }
+    return returnValue;
+}
+exports.default = allAreNullOrEmpty;
+
+},{"./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"aPoSF":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("./isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+function isNullOrEmpty(property) {
+    if (!(0, _issetDefault.default)(property)) return true;
+    if (typeof property === "string") return property.trim().length < 1;
+    if (!property.hasOwnProperty("length")) return false;
+    return property.length < 1;
+}
+exports.default = isNullOrEmpty;
+
+},{"./isset":"eqi1m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"eqi1m":[function(require,module,exports) {
+/**
+ * Determines if the provided Property is set.
+ * @param {any} property The Property to checked.
+ * @returns {boolean} If the Property is set <c>true</c> otherwise <c>false</c>.
+ * @since 1.0.0
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function isset(property) {
+    return typeof property !== "undefined" && property != null;
+}
+exports.default = isset;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"b5HIJ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _isset = require("./isset");
+var _issetDefault = parcelHelpers.interopDefault(_isset);
+function allAreSet(...args) {
+    let returnValue = true;
+    for (let arg of args)if (!(0, _issetDefault.default)(arg)) {
+        returnValue = false;
+        break;
+    }
+    return returnValue;
+}
+exports.default = allAreSet;
+
+},{"./isset":"eqi1m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"azDo8":[function(require,module,exports) {
 /**
  * this functions calls Array.from() or make the same logic if not Exists.
  * The Array.from() method creates a new, shallow-copied Array instance from an array-like or iterable object.
@@ -2216,33 +2299,7 @@ function cssClasses(...args) {
 }
 exports.default = cssClasses;
 
-},{"./isset":"eqi1m","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"eqi1m":[function(require,module,exports) {
-/**
- * Determines if the provided Property is set.
- * @param {any} property The Property to checked.
- * @returns {boolean} If the Property is set <c>true</c> otherwise <c>false</c>.
- * @since 1.0.0
- */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-function isset(property) {
-    return typeof property !== "undefined" && property != null;
-}
-exports.default = isset;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"aPoSF":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _isset = require("./isset");
-var _issetDefault = parcelHelpers.interopDefault(_isset);
-function isNullOrEmpty(property) {
-    if (!(0, _issetDefault.default)(property)) return true;
-    if (typeof property === "string") return property.trim().length < 1;
-    if (!property.hasOwnProperty("length")) return false;
-    return property.length < 1;
-}
-exports.default = isNullOrEmpty;
-
-},{"./isset":"eqi1m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5b4AA":[function(require,module,exports) {
+},{"./isset":"eqi1m","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5b4AA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _arrayFrom = require("./arrayFrom");

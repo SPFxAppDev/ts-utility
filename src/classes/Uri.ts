@@ -7,6 +7,10 @@ export interface IUrlParameter {
     Value: string; // bar,
 }
 
+/**
+ * A class for URL Parameters
+ * @since 1.2.0
+ */
 export class UrlParameter {
 
     protected Parameters: IUrlParameter[];

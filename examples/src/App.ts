@@ -12,7 +12,9 @@ import { asyncFn, randomString, cssClasses, getDeepOrDefault,
         IEventListener, IEventListenerResult, 
         removeAllParametersFromUrl, weekNumber, 
         lastDayOfWeek, firstDayOfWeek,
-        copyToClipboard, isAnyNullOrEmpty, isAnySet } from '../../src';
+        copyToClipboard, isAnyNullOrEmpty, isAnySet,
+        allAreNullOrEmpty, allAreSet
+} from '../../src';
 import { log } from '@spfxappdev/logger';
 
 interface ISimpleItem {
@@ -372,6 +374,8 @@ class FunctionsApp {
         // this.firstAndLastWeekDateExample();
         this.isAnySetExample();
         this.isAnyNullOrEmptyExample();
+        this.allAreSetExample();
+        this.allAreNullOrEmptyExample();
 
         const btn = document.getElementById("copyBtn");
         btn?.addEventListener("click", () => {
@@ -712,7 +716,8 @@ class FunctionsApp {
     @log()
     private async copyToClipboardExample(): Promise<void> {
         //await copyToClipboard("Hello from clipboard");
-        await window.navigator.clipboard.writeText("Hello from clipboard");
+        let inputField: HTMLInputElement = document.getElementById("copyInput") as HTMLInputElement;
+        await window.navigator.clipboard.writeText(inputField.value);
     }
 
     @log()
@@ -729,6 +734,22 @@ class FunctionsApp {
         console.log(isAnyNullOrEmpty(undefined, null, a));
         a = "world";
         console.log(isAnyNullOrEmpty("hello", a));
+    }
+
+    @log()
+    private allAreSetExample(): void {
+        let a;
+        console.log(allAreSet("", true, "hello"));
+        console.log(allAreSet("", "hello", undefined, null, a));
+    }
+
+    @log()
+    private allAreNullOrEmptyExample(): void {
+        let a;
+        console.log(allAreNullOrEmpty(undefined, null, a, "hello"));
+        console.log(allAreNullOrEmpty(undefined, null, a, [], ""));
+        a = "world";
+        console.log(allAreNullOrEmpty("hello", a));
     }
 
     

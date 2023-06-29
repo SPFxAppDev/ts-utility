@@ -2,7 +2,7 @@
 import isset from './isset';
 
 /**
- * Determines if any of the the provided properties are set.
+ * Determines if any of the the provided properties are set (not null or undefined).
  * @param {any} args One or more properties to checked.
  * @returns {boolean} If One of the Property is set <c>true</c> otherwise <c>false</c>.
  * @since 1.3.0

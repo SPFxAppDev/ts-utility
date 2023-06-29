@@ -8,6 +8,7 @@
   },
   "source": " src/index.html",
   "scripts": {
+    "preserve": "rimraf ./.parcel-cache && rimraf ./.cache",
     "serve": "parcel serve src/index.html"
   },
   "name": "npm",
