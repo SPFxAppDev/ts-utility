@@ -11,9 +11,12 @@ export type PromiseFunc<T> = (...args: any) => Promise<T>;
  *
  * @template TResult Type of expected result
  * @template TError Type of expected error
- * @param {Promise<TResult>} The asynchronous function to wait for
- * @return {*}  {Promise<AsyncResult<TResult, TError>>}
+ * @param {PromiseFunc<TResult>} promiseFn The asynchronous function to wait for
+ * @param {any} promiseFnArgs A set of arguments to be passed to the function (since 1.1.1)
+ * @return {Promise<AsyncResult<TResult, TError>>}
  * @since 1.1.0
+ * @example const [result, error] = await asyncFn(myPromiseFunc, true, 2000);
+ * @example const [result, error] = await asyncFn<PromiseResultType, Error>(this.myPromiseFunc.bind(this), true, null, 'abc');
  */
 export default async function asyncFn<TResult, TError>(
     promiseFn: PromiseFunc<TResult>,
