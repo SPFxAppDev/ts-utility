@@ -1,4 +1,4 @@
-import { isset } from '../index';
+import { isset } from '../functions';
 
 export interface IResult<T> {
   originalError?: any;
@@ -24,5 +24,9 @@ export class Result<T> implements IResult<T> {
 
   public originalError?: any = null;
   public value: T | null = null;
-  public success: boolean = true;
+  public success: boolean;
+
+  public constructor(success: boolean = true) {
+    this.success = success;
+  }
 }

@@ -558,11 +558,19 @@ function hmrAccept(bundle, id) {
 
 },{}],"lyqAI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// new ArrayApp().start();
+// new StringsApp().start();
+// new FunctionsApp().start();
+// new ClassesApp().start();
+// new EventListenerApp().start();
+parcelHelpers.export(exports, "Example", ()=>Example);
 var _tsDecorateMjs = require("@swc/helpers/src/_ts_decorate.mjs");
 var _tsDecorateMjsDefault = parcelHelpers.interopDefault(_tsDecorateMjs);
 var _arrayExtensions = require("../../src/extensions/ArrayExtensions");
 var _stringExtensions = require("../../src/extensions/StringExtensions");
 var _src = require("../../src");
+// import {  } from '../../src/classes';
 var _logger = require("@spfxappdev/logger");
 const simpleArray = [
     {
@@ -1420,68 +1428,50 @@ class EventListenerApp {
 (0, _tsDecorateMjsDefault.default)([
     (0, _logger.log)()
 ], EventListenerApp.prototype, "fireEventExample", null);
-// new ArrayApp().start();
-// new StringsApp().start();
-new FunctionsApp().start();
-// new ClassesApp().start();
-// new EventListenerApp().start();
-const tryCatch = ()=>{
-    return (target, propertyKey, descriptor)=>{
-        const originalMethod = descriptor.value;
-        descriptor.value = function() {
-            //TODO: Promise Check
-            try {
-                const result = originalMethod.apply(this, arguments);
-                if (!(result instanceof Promise)) return result;
-                // (result as Promise<any>)
-                //   .then((value) => {
-                //     return value;
-                //   })
-                //   .catch((error) => {
-                //     console.error('JobaniNasos ', error);
-                //     throw error;
-                //   });
-                Promise.resolve(result).then((value)=>{
-                    console.log("Resolve", result, value);
-                    return value;
-                }).catch((error)=>{
-                    console.log("SSC error");
-                    return Promise.reject(error);
-                });
-            } catch (error) {
-                console.error(`Error caught in method "${propertyKey}":`, error);
-            }
-        };
-        return descriptor;
-    };
-};
 class Example {
     someMethod() {
+        const t = new (0, _src.Uri)("https://google.de");
+        const teeeeeeeeest = new (0, _src.Result)();
         throw new Error("Blahamuha");
     }
     async anotherMethod() {
-        await this.anotherMethodCall();
-        console.log("Still working");
+        console.log("anotherMethod START");
+        const result = await (0, _src.asyncFnAsResult)(this.anotherMethodCall);
+        console.log("Still working", result);
+    // const msg = await this.anotherMethodCallSuccess();
+    // console.log('anotherMethod END, still working', msg);
     }
     async anotherMethodCall(delay = 5000) {
-        return new Promise((resolve, reject)=>{
-            setTimeout(()=>{
-                return reject(`anotherMethodCall Error after ${delay}ms`);
-            }, 5000);
+        const response = await fetch("https://httpstat.us/404?sleep=" + delay, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
         });
+        if (!response.ok) throw new Error("Failed to fetch request");
+        const jsonResponse = await response.json();
+        console.log("jsonResponse 404", jsonResponse);
+        return "mmmkay";
+    }
+    async anotherMethodCallSuccess(delay = 5000) {
+        const response = await fetch("https://httpstat.us/200?sleep=4000", {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        });
+        const jsonResponse = await response.json();
+        console.log("jsonResponse", jsonResponse);
+        return "mmmkay";
     }
 }
 (0, _tsDecorateMjsDefault.default)([
-    tryCatch()
+    (0, _src.tryCatch)({
+        defaultValueOnError: new (0, _src.Result)(false)
+    })
 ], Example.prototype, "someMethod", null);
-(0, _tsDecorateMjsDefault.default)([
-    tryCatch()
-], Example.prototype, "anotherMethod", null);
-(0, _tsDecorateMjsDefault.default)([
-    tryCatch()
-], Example.prototype, "anotherMethodCall", null);
 const instance = new Example();
-instance.someMethod();
+console.log("This should fail", instance.someMethod());
 instance.anotherMethod();
 
 },{"@swc/helpers/src/_ts_decorate.mjs":"6yrWP","../../src/extensions/ArrayExtensions":"iAHJd","../../src/extensions/StringExtensions":"bZeFs","../../src":"gBgwL","@spfxappdev/logger":"cUCDD","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"6yrWP":[function(require,module,exports) {
@@ -2149,6 +2139,7 @@ parcelHelpers.export(exports, "toBoolean", ()=>(0, _toBooleanDefault.default));
 parcelHelpers.export(exports, "asyncFn", ()=>(0, _asyncFnDefault.default));
 parcelHelpers.export(exports, "AsyncResult", ()=>(0, _asyncFn.AsyncResult));
 parcelHelpers.export(exports, "PromiseFunc", ()=>(0, _asyncFn.PromiseFunc));
+parcelHelpers.export(exports, "asyncFnAsResult", ()=>(0, _asyncFnAsResultDefault.default));
 parcelHelpers.export(exports, "catchFn", ()=>(0, _catchFnDefault.default));
 parcelHelpers.export(exports, "CatchFunc", ()=>(0, _catchFn.CatchFunc));
 parcelHelpers.export(exports, "promiseQueue", ()=>(0, _promiseQueueDefault.default));
@@ -2192,6 +2183,8 @@ var _toBoolean = require("./toBoolean");
 var _toBooleanDefault = parcelHelpers.interopDefault(_toBoolean);
 var _asyncFn = require("./asyncFn");
 var _asyncFnDefault = parcelHelpers.interopDefault(_asyncFn);
+var _asyncFnAsResult = require("./asyncFnAsResult");
+var _asyncFnAsResultDefault = parcelHelpers.interopDefault(_asyncFnAsResult);
 var _catchFn = require("./catchFn");
 var _catchFnDefault = parcelHelpers.interopDefault(_catchFn);
 var _promiseQueue = require("./promiseQueue");
@@ -2211,7 +2204,7 @@ var _removeAllParametersFromUrlDefault = parcelHelpers.interopDefault(_removeAll
 var _date = require("./date");
 parcelHelpers.exportAll(_date, exports);
 
-},{"./allAreNullOrEmpty":"jJKZA","./allAreSet":"b5HIJ","./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./catchFn":"4kX89","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"jJKZA":[function(require,module,exports) {
+},{"./allAreNullOrEmpty":"jJKZA","./allAreSet":"b5HIJ","./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./asyncFnAsResult":"1Bnif","./catchFn":"4kX89","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"jJKZA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _isNullOrEmpty = require("./isNullOrEmpty");
@@ -2532,59 +2525,25 @@ async function asyncFn(promiseFn, ...promiseFnArgs) {
 }
 exports.default = asyncFn;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"4kX89":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"1Bnif":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _result = require("../classes/Result");
+var _classes = require("../classes");
+var _asyncFn = require("./asyncFn");
+var _asyncFnDefault = parcelHelpers.interopDefault(_asyncFn);
 var _isNullOrEmpty = require("./isNullOrEmpty");
 var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
-function catchFn(fnToCatch, thisArg, ...fnArgs) {
-    const result = new (0, _result.Result)();
-    try {
-        if (!(0, _isNullOrEmptyDefault.default)(thisArg) && typeof thisArg === "object") result.value = fnToCatch.apply(thisArg, [
-            ...fnArgs
-        ]);
-        else result.value = fnToCatch(...fnArgs);
-    } catch (error) {
-        result.error = error;
-    }
+async function asyncFnAsResult(promiseFn, thisArg, ...promiseFnArgs) {
+    const result = new (0, _classes.Result)();
+    const bindThis = !(0, _isNullOrEmptyDefault.default)(thisArg) && typeof thisArg === "object";
+    const [asyncResult, error] = await (0, _asyncFnDefault.default)(bindThis ? promiseFn.bind(thisArg) : promiseFn, ...promiseFnArgs);
+    if (error) result.error = error;
+    else result.value = asyncResult;
     return result;
 }
-exports.default = catchFn;
+exports.default = asyncFnAsResult;
 
-},{"../classes/Result":"uZAxM","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"uZAxM":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Result", ()=>Result);
-var _index = require("../index");
-class Result {
-    _error = null;
-    get error() {
-        return this._error;
-    }
-    set error(val) {
-        this._error = val;
-        this.success = false;
-        if (!(0, _index.isset)(this.originalError)) this.originalError = val;
-    }
-    originalError = null;
-    value = null;
-    success = true;
-}
-
-},{"../index":"gBgwL","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"gBgwL":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _functions = require("./functions");
-parcelHelpers.exportAll(_functions, exports);
-var _classes = require("./classes");
-parcelHelpers.exportAll(_classes, exports);
-var _events = require("./events");
-parcelHelpers.exportAll(_events, exports);
-var _decorators = require("./decorators");
-parcelHelpers.exportAll(_decorators, exports);
-
-},{"./functions":"fZyL3","./classes":"lvbA5","./events":"5vG8m","./decorators":"81MG9","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"lvbA5":[function(require,module,exports) {
+},{"../classes":"lvbA5","./asyncFn":"l1HTW","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"lvbA5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _uri = require("./Uri");
@@ -2823,109 +2782,49 @@ String.prototype.ReplaceAll = function(searchTerm, replaceWith) {
     return s.replace(new RegExp(searchTerm, "g"), replaceWith);
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5vG8m":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"uZAxM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EventHandler", ()=>(0, _eventHandler.EventHandler));
-parcelHelpers.export(exports, "IEventListener", ()=>(0, _eventListener.IEventListener));
-parcelHelpers.export(exports, "IEventListenerResult", ()=>(0, _eventListener.IEventListenerResult));
-parcelHelpers.export(exports, "EventListenerBase", ()=>(0, _eventListener.EventListenerBase));
-var _eventHandler = require("./EventHandler");
-var _eventListener = require("./EventListener");
-
-},{"./EventHandler":"foMPC","./EventListener":"bErHX","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"foMPC":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EventHandler", ()=>EventHandler);
+parcelHelpers.export(exports, "Result", ()=>Result);
 var _functions = require("../functions");
-var _arrayExtensions = require("../extensions/ArrayExtensions");
-class EventHandler {
-    static allUniqueEventIds = [];
-    static Listen(name, listener, uniqueEventId) {
-        if ((0, _functions.isNullOrEmpty)(uniqueEventId)) uniqueEventId = (0, _functions.randomString)(32, "abcdef0123456789");
-        if (EventHandler.allUniqueEventIds.IndexOf((id)=>id.Equals(uniqueEventId, true)) >= 0) return;
-        EventHandler.allUniqueEventIds.push(uniqueEventId);
-        EventHandler.register(name, listener);
+class Result {
+    _error = null;
+    get error() {
+        return this._error;
     }
-    static Fire(name, ...args) {
-        const allListener = EventHandler.getListener(name);
-        if ((0, _functions.isNullOrEmpty)(allListener)) return "";
-        const result = [];
-        let lastEventResult = null;
-        const sortedListener = allListener.OrderBy((listener)=>listener.Sequence);
-        for(let i = 0; i < sortedListener.length; i++){
-            const listener = sortedListener[i];
-            lastEventResult = listener.Execute(name, lastEventResult, ...args);
-            if ((0, _functions.isNullOrEmpty)(lastEventResult) || lastEventResult.ErrorOccurred) continue;
-            if (!(0, _functions.isNullOrEmpty)(lastEventResult.Result)) result.push(lastEventResult.Result);
-            if (lastEventResult.DisableEventListening) break;
-        }
-        return result;
+    set error(val) {
+        this._error = val;
+        this.success = false;
+        if (!(0, _functions.isset)(this.originalError)) this.originalError = val;
     }
-    static generateWindowListenerObject(name) {
-        window["SPFxAppDevEventListener"] = window["SPFxAppDevEventListener"] || {};
-        window["SPFxAppDevEventListener"][name] = window["SPFxAppDevEventListener"][name] || [];
-    }
-    static register(name, listener) {
-        EventHandler.generateWindowListenerObject(name);
-        window["SPFxAppDevEventListener"][name].push(listener);
-    }
-    static getListener(name) {
-        EventHandler.generateWindowListenerObject(name);
-        const allListener = window["SPFxAppDevEventListener"][name];
-        if ((0, _functions.isNullOrEmpty)(allListener)) return null;
-        return allListener;
+    originalError = null;
+    value = null;
+    constructor(success = true){
+        this.success = success;
     }
 }
 
-},{"../functions":"fZyL3","../extensions/ArrayExtensions":"iAHJd","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bErHX":[function(require,module,exports) {
+},{"../functions":"fZyL3","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"4kX89":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EventListenerBase", ()=>EventListenerBase);
-class EventListenerBase {
-    Sequence = 0;
-    ErrorOccurred = false;
-    Error = null;
-    Result = null;
-    DisableEventListening = false;
-    Execute(name, lastEventResult, ...args) {
-        throw new Error("Method not implemented.");
+var _result = require("../classes/Result");
+var _isNullOrEmpty = require("./isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+function catchFn(fnToCatch, thisArg, ...fnArgs) {
+    const result = new (0, _result.Result)();
+    try {
+        if (!(0, _isNullOrEmptyDefault.default)(thisArg) && typeof thisArg === "object") result.value = fnToCatch.apply(thisArg, [
+            ...fnArgs
+        ]);
+        else result.value = fnToCatch(...fnArgs);
+    } catch (error) {
+        result.error = error;
     }
+    return result;
 }
+exports.default = catchFn;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"81MG9":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "tryCatch", ()=>(0, _tryCatch.tryCatch));
-var _tryCatch = require("./tryCatch");
-
-},{"./tryCatch":"i998v","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"i998v":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "tryCatch", ()=>tryCatch);
-const tryCatch = ()=>{
-    return (target, propertyKey, descriptor)=>{
-        const originalMethod = descriptor.value;
-        descriptor.value = function() {
-            //TODO: Promise Check
-            try {
-                const result = originalMethod.apply(this, arguments);
-                if (!(result instanceof Promise)) return result;
-                return Promise.resolve(result).then((value)=>{
-                    return value;
-                }).catch((error)=>{
-                    console.error(`Error caught in async method "${propertyKey}":`, error);
-                    return Promise.reject(error);
-                });
-            } catch (error) {
-                console.error(`Error caught in method "${propertyKey}":`, error);
-            }
-        };
-        return descriptor;
-    };
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"fxMVR":[function(require,module,exports) {
+},{"../classes/Result":"uZAxM","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"fxMVR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "toParameterlessPromiseQueueFunc", ()=>toParameterlessPromiseQueueFunc);
@@ -3304,7 +3203,130 @@ function weekNumber(date) {
 }
 exports.default = weekNumber;
 
-},{"../isset":"eqi1m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"cUCDD":[function(require,module,exports) {
+},{"../isset":"eqi1m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"gBgwL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _functions = require("./functions");
+parcelHelpers.exportAll(_functions, exports);
+var _classes = require("./classes");
+parcelHelpers.exportAll(_classes, exports);
+var _events = require("./events");
+parcelHelpers.exportAll(_events, exports);
+var _decorators = require("./decorators");
+parcelHelpers.exportAll(_decorators, exports);
+
+},{"./functions":"fZyL3","./classes":"lvbA5","./events":"5vG8m","./decorators":"81MG9","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5vG8m":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EventHandler", ()=>(0, _eventHandler.EventHandler));
+parcelHelpers.export(exports, "IEventListener", ()=>(0, _eventListener.IEventListener));
+parcelHelpers.export(exports, "IEventListenerResult", ()=>(0, _eventListener.IEventListenerResult));
+parcelHelpers.export(exports, "EventListenerBase", ()=>(0, _eventListener.EventListenerBase));
+var _eventHandler = require("./EventHandler");
+var _eventListener = require("./EventListener");
+
+},{"./EventHandler":"foMPC","./EventListener":"bErHX","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"foMPC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EventHandler", ()=>EventHandler);
+var _functions = require("../functions");
+var _arrayExtensions = require("../extensions/ArrayExtensions");
+class EventHandler {
+    static allUniqueEventIds = [];
+    static Listen(name, listener, uniqueEventId) {
+        if ((0, _functions.isNullOrEmpty)(uniqueEventId)) uniqueEventId = (0, _functions.randomString)(32, "abcdef0123456789");
+        if (EventHandler.allUniqueEventIds.IndexOf((id)=>id.Equals(uniqueEventId, true)) >= 0) return;
+        EventHandler.allUniqueEventIds.push(uniqueEventId);
+        EventHandler.register(name, listener);
+    }
+    static Fire(name, ...args) {
+        const allListener = EventHandler.getListener(name);
+        if ((0, _functions.isNullOrEmpty)(allListener)) return "";
+        const result = [];
+        let lastEventResult = null;
+        const sortedListener = allListener.OrderBy((listener)=>listener.Sequence);
+        for(let i = 0; i < sortedListener.length; i++){
+            const listener = sortedListener[i];
+            lastEventResult = listener.Execute(name, lastEventResult, ...args);
+            if ((0, _functions.isNullOrEmpty)(lastEventResult) || lastEventResult.ErrorOccurred) continue;
+            if (!(0, _functions.isNullOrEmpty)(lastEventResult.Result)) result.push(lastEventResult.Result);
+            if (lastEventResult.DisableEventListening) break;
+        }
+        return result;
+    }
+    static generateWindowListenerObject(name) {
+        window["SPFxAppDevEventListener"] = window["SPFxAppDevEventListener"] || {};
+        window["SPFxAppDevEventListener"][name] = window["SPFxAppDevEventListener"][name] || [];
+    }
+    static register(name, listener) {
+        EventHandler.generateWindowListenerObject(name);
+        window["SPFxAppDevEventListener"][name].push(listener);
+    }
+    static getListener(name) {
+        EventHandler.generateWindowListenerObject(name);
+        const allListener = window["SPFxAppDevEventListener"][name];
+        if ((0, _functions.isNullOrEmpty)(allListener)) return null;
+        return allListener;
+    }
+}
+
+},{"../functions":"fZyL3","../extensions/ArrayExtensions":"iAHJd","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bErHX":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EventListenerBase", ()=>EventListenerBase);
+class EventListenerBase {
+    Sequence = 0;
+    ErrorOccurred = false;
+    Error = null;
+    Result = null;
+    DisableEventListening = false;
+    Execute(name, lastEventResult, ...args) {
+        throw new Error("Method not implemented.");
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"81MG9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "tryCatch", ()=>(0, _tryCatch.tryCatch));
+var _tryCatch = require("./tryCatch");
+
+},{"./tryCatch":"i998v","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"i998v":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "tryCatch", ()=>tryCatch);
+const tryCatch = (options)=>{
+    const defaultOptions = {
+        defaultValueOnError: null
+    };
+    options = {
+        ...defaultOptions,
+        ...options
+    };
+    return (target, propertyKey, descriptor)=>{
+        const originalMethod = descriptor.value;
+        descriptor.value = function() {
+            try {
+                const result = originalMethod.apply(this, arguments);
+                if (!(result instanceof Promise)) return result;
+                return new Promise((resolve)=>{
+                    result.then((value)=>{
+                        return resolve(value);
+                    }).catch((error)=>{
+                        console.error(`Error caught in method "${propertyKey}":`, error);
+                        return resolve(options.defaultValueOnError);
+                    });
+                });
+            } catch (error) {
+                console.error(`Error caught in method "${propertyKey}":`, error);
+                return options.defaultValueOnError;
+            }
+        };
+        return descriptor;
+    };
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"cUCDD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Logger", ()=>(0, _logger.Logger));

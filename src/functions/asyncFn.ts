@@ -1,9 +1,9 @@
-export type AsyncResult<TResult, TError> = [TResult|null, TError|null];
+export type AsyncResult<TResult, TError> = [TResult | null, TError | null];
 
-/** 
+/**
  * Type for supporting methodes with parameters
  * @since 1.1.1
-*/
+ */
 export type PromiseFunc<T> = (...args: any) => Promise<T>;
 
 /**
@@ -19,13 +19,13 @@ export type PromiseFunc<T> = (...args: any) => Promise<T>;
  * @example const [result, error] = await asyncFn<PromiseResultType, Error>(this.myPromiseFunc.bind(this), true, null, 'abc');
  */
 export default async function asyncFn<TResult, TError>(
-    promiseFn: PromiseFunc<TResult>,
-    ...promiseFnArgs: any
+  promiseFn: PromiseFunc<TResult>,
+  ...promiseFnArgs: any
 ): Promise<AsyncResult<TResult, TError>> {
-    try {
-        const r: TResult = await promiseFn(...promiseFnArgs);
-        return [r, null];
-    } catch (e: any) {
-        return [null, e];
-    }
+  try {
+    const r: TResult = await promiseFn(...promiseFnArgs);
+    return [r, null];
+  } catch (e: any) {
+    return [null, e];
+  }
 }

@@ -39,8 +39,11 @@ import {
   allAreNullOrEmpty,
   allAreSet,
   catchFn,
-  //   tryCatch,
+  asyncFnAsResult,
+  tryCatch,
+  Result,
 } from '../../src';
+// import {  } from '../../src/classes';
 import { log } from '@spfxappdev/logger';
 
 interface ISimpleItem {
@@ -1165,72 +1168,63 @@ class EventListenerApp {
 
 // new ArrayApp().start();
 // new StringsApp().start();
-new FunctionsApp().start();
+// new FunctionsApp().start();
 // new ClassesApp().start();
 // new EventListenerApp().start();
 
-const tryCatch: () => any = (): any => {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const originalMethod = descriptor.value;
-
-    descriptor.value = function () {
-      //TODO: Promise Check
-      try {
-        const result: any = originalMethod.apply(this, arguments);
-
-        if (!(result instanceof Promise)) {
-          return result;
-        }
-
-        // (result as Promise<any>)
-        //   .then((value) => {
-        //     return value;
-        //   })
-        //   .catch((error) => {
-        //     console.error('JobaniNasos ', error);
-        //     throw error;
-        //   });
-
-        Promise.resolve(result)
-          .then((value) => {
-            console.log('Resolve', result, value);
-            return value;
-          })
-          .catch((error) => {
-            console.log('SSC error');
-            return Promise.reject(error);
-          });
-      } catch (error) {
-        console.error(`Error caught in method "${propertyKey}":`, error);
-      }
-    };
-
-    return descriptor;
-  };
-};
-
-class Example {
-  @tryCatch()
+export class Example {
+  @tryCatch<Result<Date>>({
+    defaultValueOnError: new Result<Date>(false),
+  })
   someMethod() {
+    const t = new Uri('https://google.de');
+    const teeeeeeeeest = new Result();
     throw new Error('Blahamuha');
   }
 
-  @tryCatch()
   async anotherMethod(): Promise<any> {
-    await this.anotherMethodCall();
-    console.log('Still working');
+    console.log('anotherMethod START');
+    const result = await asyncFnAsResult<any>(this.anotherMethodCall);
+    console.log('Still working', result);
+    // const msg = await this.anotherMethodCallSuccess();
+    // console.log('anotherMethod END, still working', msg);
   }
 
-  @tryCatch()
   async anotherMethodCall(delay: number = 5000): Promise<any> {
-    return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
-        return reject(`anotherMethodCall Error after ${delay}ms`);
-      }, 5000);
+    const response = await fetch('https://httpstat.us/404?sleep=' + delay, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch request');
+    }
+
+    const jsonResponse = await response.json();
+
+    console.log('jsonResponse 404', jsonResponse);
+
+    return 'mmmkay';
+  }
+
+  async anotherMethodCallSuccess(delay: number = 5000): Promise<string> {
+    const response = await fetch('https://httpstat.us/200?sleep=4000', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+
+    const jsonResponse = await response.json();
+
+    console.log('jsonResponse', jsonResponse);
+
+    return 'mmmkay';
   }
 }
 
 const instance = new Example();
-instance.someMethod();
+console.log('This should fail', instance.someMethod());
 instance.anotherMethod();
