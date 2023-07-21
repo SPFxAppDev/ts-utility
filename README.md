@@ -8,6 +8,7 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [allAreNullOrEmpty](#allarenullorempty)
   * [allAreSet](#allareset)
   * [asyncFn](#asyncfn)
+  * [asyncFnAsResult](#asyncfnasresult)
   * [copyToClipboard](#copytoclipboard)
   * [countWorkdays](#countworkdays)
   * [cssClasses](#cssclasses)
@@ -55,6 +56,8 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [OrderByMultipleDescending](#orderbymultipledescending)
   * [RemoveAt](#removeat)
   * [Where](#where)
+- [Decorators](#decorators)
+  * [@tryCatch](#trycatch)
 
 ## Installation
 
@@ -79,6 +82,7 @@ import { isset } from '@spfxappdev/utility';
 - [allAreNullOrEmpty](#allarenullorempty)
 - [allAreSet](#allareset)
 - [asyncFn](#asyncfn)
+- [asyncFnAsResult](#asyncfnasresult)
 - [copyToClipboard](#copytoclipboard)
 - [countWorkdays](#countworkdays)
 - [cssClasses](#cssclasses)
@@ -185,6 +189,11 @@ You can use the `asyncFn`-function like this
 import { asyncFn } from '@spfxappdev/utility';
 
 const [result, error] = await asyncFn(myAsyncFunction);
+//with paramaters
+const [result2, error2] = await asyncFn(myAsyncFunction, true, 2000);
+
+//with "this" binding
+const [result3, error3] = await asyncFn(this.myAsyncFunction.bind(this), true, 2000);
 
 if(error) {
     throw "Whatever";
@@ -195,6 +204,101 @@ console.log(result);
 ```
 ___
 
+#### asyncFnAsResult 
+
+![since @spfxappdev/utility@1.4.0](https://img.shields.io/badge/since-v1.4.0-red) 
+
+A wrapper function to handle an await function and their results/errors as `IResult<TResult>`
+
+##### Examples
+
+Instead of using this:
+
+```typescript
+const result = new Result<any>();
+
+try {
+
+    result.value = await myAsyncFunction();
+    console.log(result);
+    //Do things with result
+} 
+catch (error) {
+    result.error = error;
+    console.error("An error occurred", error);
+}
+
+return result;
+ 
+```
+
+You can use the `asyncFnAsResult`-function like this
+
+```typescript
+import { asyncFnAsResult } from '@spfxappdev/utility';
+
+const result = await asyncFnAsResult(myAsyncFunction);
+//with parameter binding
+const result2 = await asyncFnAsResult(myAsyncFunction, null, param1, param2, ...);
+//with "this" binding
+const result3 = await asyncFnAsResult(myAsyncFunction, this, param1, param2, ...);
+
+if(!result.success) {
+    throw "Whatever";
+}
+
+console.log(result);
+//Do things with result
+```
+___
+
+#### catchFn 
+
+![since @spfxappdev/utility@1.4.0](https://img.shields.io/badge/since-v1.4.0-red) 
+
+A function to wrap a specified function with a try-catch block and returns `IResult<TResult>`.
+
+##### Examples
+
+Instead of using this:
+
+```typescript
+const result = new Result<any>();
+
+try {
+
+    result.value = myFunction();
+    console.log(result);
+    //Do things with result
+} 
+catch (error) {
+    result.error = error;
+    console.error("An error occurred", error);
+}
+
+return result;
+ 
+```
+
+You can use the `catchFn`-function like this
+
+```typescript
+import { catchFn } from '@spfxappdev/utility';
+
+const result = catchFn(myFunction);
+//with parameter binding
+const result2 = catchFn(myFunction, null, param1, param2, ...);
+//with "this" binding
+const result3 = catchFn(myFunction, this, param1, param2, ...);
+
+if(!result.success) {
+    throw "Whatever";
+}
+
+console.log(result);
+//Do things with result
+```
+___
 
 #### copyToClipboard
 
@@ -1275,4 +1379,91 @@ console.log(allItemsWhereSequenceGt1); //==> [{ id: 'bjdvY', name: "App", sequen
 const notFoundItems: ISimpleItem[] = myArr.Where(i => i.name.Equals("404"));
 
 console.log(notFoundItems); // ==> []
+```
+
+## Decorators
+
+The decorators are helpful if you want to achieve a lot with less code and also fast. 
+
+In order to better understand how decorators work, I recommend reading [this article](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841). 
+
+> **Simple definition**: An ES2016 decorator is an expression which returns a function and can take a target, name and property descriptor as arguments. You apply it by prefixing the decorator with an @ character and placing this at the very top of what you are trying to decorate. Decorators can be defined for either a class, a method or a property.
+
+Let's compare the same code **without** decorators and **with** decorators (by using the `tryCatch` decorator). The logic is not changed, but the result is the same:
+
+### Simple class WITHOUT decorators
+
+```typescript
+class MyExampleClass {
+
+    public dummyFunc(str: string): number {
+        try {
+            //will throw an error, if str is undefined;
+           return str.indexOf("h");
+        }
+        catch(error) {
+            //do something
+        }
+
+        return 0;
+    }
+}
+```
+
+### (Same) Simple class WITH decorators
+
+```typescript
+class MyExampleClass {
+    
+    @tryCatch<number>({
+        defaultValueOnError: 0
+    })
+    public dummyFunc(str: string): number {
+        return str.indexOf("h");
+    }
+}
+```
+
+
+Needless to say, decorators save a lot of time, reduce the number of lines (13 lines vs. 8 lines) and improve readability.
+
+
+### How to use decorators
+___
+
+> **INFO**: To use the method decorators, you must set the `experimentalDecorators` property in your `tsconfig.json` to `true`.
+
+Here is a list of all available `method` decorators:
+
+
+| Decorator name                        | Description                        |
+|---------------------------------------|------------------------------------|
+| `@tryCatch`                           | Decorator to wrap a class method with a try-catch block. Works also with `Promise` |
+
+
+
+In order to use the decorators, they must be imported
+
+```typescript
+export { tryCatch  } from '@spfxappdev/storage';
+```
+
+#### @tryCatch
+
+![since @spfxappdev/utility@1.4.0](https://img.shields.io/badge/since-v1.4.0-red) 
+
+Decorator to wrap a class method with a try-catch block. Works also with `Promise`
+
+##### Example
+
+```typescript
+class MyExampleClass {
+    
+    @tryCatch<number>({
+        defaultValueOnError: 0
+    })
+    public dummyFunc(str: string): number {
+        return str.indexOf("h");
+    }
+}
 ```

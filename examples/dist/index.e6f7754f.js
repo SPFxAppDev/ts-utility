@@ -558,11 +558,19 @@ function hmrAccept(bundle, id) {
 
 },{}],"lyqAI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// new ArrayApp().start();
+// new StringsApp().start();
+// new FunctionsApp().start();
+// new ClassesApp().start();
+// new EventListenerApp().start();
+parcelHelpers.export(exports, "Example", ()=>Example);
 var _tsDecorateMjs = require("@swc/helpers/src/_ts_decorate.mjs");
 var _tsDecorateMjsDefault = parcelHelpers.interopDefault(_tsDecorateMjs);
 var _arrayExtensions = require("../../src/extensions/ArrayExtensions");
 var _stringExtensions = require("../../src/extensions/StringExtensions");
 var _src = require("../../src");
+// import {  } from '../../src/classes';
 var _logger = require("@spfxappdev/logger");
 const simpleArray = [
     {
@@ -930,7 +938,8 @@ class StringsApp {
 class FunctionsApp {
     testString = "Hello @spfxappdev/utility";
     start() {
-        // this.ayncFnExamples();
+        console.log((0, _src.catchFn)(this.testThrow));
+        //this.asyncFnExamples();
         // this.cssClassesExamples();
         // this.getDeepOrDefaultExamples();
         // this.getUrlParameterExamples();
@@ -951,10 +960,10 @@ class FunctionsApp {
         // this.firstAndLastDateExample();
         // this.weekNumberExample();
         // this.firstAndLastWeekDateExample();
-        this.isAnySetExample();
-        this.isAnyNullOrEmptyExample();
-        this.allAreSetExample();
-        this.allAreNullOrEmptyExample();
+        // this.isAnySetExample();
+        // this.isAnyNullOrEmptyExample();
+        // this.allAreSetExample();
+        // this.allAreNullOrEmptyExample();
         const btn = document.getElementById("copyBtn");
         btn?.addEventListener("click", ()=>{
             this.copyToClipboardExample();
@@ -963,13 +972,18 @@ class FunctionsApp {
     dummyPromise(success = true, delay = 5000) {
         console.log("dummyPromise START");
         return new Promise((resolve, reject)=>{
-            setTimeout(()=>{
-                if (success) {
-                    console.log("IN dummyPromise success ", delay);
-                    return resolve(`Success after ${delay}ms`);
+            setTimeout(async ()=>{
+                try {
+                    if (success) {
+                        console.log("IN dummyPromise success ", delay);
+                        await this.parameterlessPromiseFunc();
+                        return resolve(`Success after ${delay}ms`);
+                    }
+                    console.log("IN dummyPromise fail ", delay);
+                    return reject(`Error after ${delay}ms`);
+                } catch (e) {
+                    reject(e);
                 }
-                console.log("IN dummyPromise fail ", delay);
-                return reject(`Error after ${delay}ms`);
             }, delay);
         });
     }
@@ -981,13 +995,18 @@ class FunctionsApp {
             }, 5000);
         });
     }
-    async ayncFnExamples() {
-        const [result, error] = await (0, _src.asyncFn)(this.dummyPromise(true, 2000));
-        console.log(result, error);
+    async asyncFnExamples() {
+        const [result, error] = await (0, _src.asyncFn)(this.parameterlessPromiseFunc);
+        console.log("result1", result, error);
         if (error) console.error("ERROR occurred...");
-        const [result2, error2] = await (0, _src.asyncFn)(this.dummyPromise(false, 2000));
-        console.log(result2, error2);
+        const [result2, error2] = await (0, _src.asyncFn)(this.dummyPromise, true, 2000);
+        console.log("result2", result2, error2);
         if (error2) console.error("ERROR occurred...");
+        const [result3, error3] = await (0, _src.asyncFn)(this.dummyPromise, false, 2000);
+        console.log("result3", result3, error3);
+        //With "this" binding
+        const [result4, error4] = await (0, _src.asyncFn)(this.dummyPromise.bind(this), true, 2000);
+        console.log("result4", result4, error4);
     }
     cssClassesExamples() {
         console.log(`cssClasses('spfx-app-dev', 'theme') ==> `, (0, _src.cssClasses)("spfx-app-dev", "theme"));
@@ -1199,7 +1218,7 @@ class FunctionsApp {
                 LastName: "Dev"
             }
         }, ""));
-    //Hello 
+    //Hello
     }
     removeAllUrlParametersExample() {
         console.log((0, _src.removeAllParametersFromUrl)("https://spfx-app.dev#firstAnchor#secondAnchor"));
@@ -1277,7 +1296,7 @@ class FunctionsApp {
 }
 (0, _tsDecorateMjsDefault.default)([
     (0, _logger.log)()
-], FunctionsApp.prototype, "ayncFnExamples", null);
+], FunctionsApp.prototype, "asyncFnExamples", null);
 (0, _tsDecorateMjsDefault.default)([
     (0, _logger.log)()
 ], FunctionsApp.prototype, "cssClassesExamples", null);
@@ -1409,10 +1428,51 @@ class EventListenerApp {
 (0, _tsDecorateMjsDefault.default)([
     (0, _logger.log)()
 ], EventListenerApp.prototype, "fireEventExample", null);
-// new ArrayApp().start();
-// new StringsApp().start();
-new FunctionsApp().start(); // new ClassesApp().start();
- // new EventListenerApp().start();
+class Example {
+    someMethod() {
+        const t = new (0, _src.Uri)("https://google.de");
+        const teeeeeeeeest = new (0, _src.Result)();
+        throw new Error("Blahamuha");
+    }
+    async anotherMethod() {
+        console.log("anotherMethod START");
+        const result = await (0, _src.asyncFnAsResult)(this.anotherMethodCall);
+        console.log("Still working", result);
+    // const msg = await this.anotherMethodCallSuccess();
+    // console.log('anotherMethod END, still working', msg);
+    }
+    async anotherMethodCall(delay = 5000) {
+        const response = await fetch("https://httpstat.us/404?sleep=" + delay, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        });
+        if (!response.ok) throw new Error("Failed to fetch request");
+        const jsonResponse = await response.json();
+        console.log("jsonResponse 404", jsonResponse);
+        return "mmmkay";
+    }
+    async anotherMethodCallSuccess(delay = 5000) {
+        const response = await fetch("https://httpstat.us/200?sleep=4000", {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        });
+        const jsonResponse = await response.json();
+        console.log("jsonResponse", jsonResponse);
+        return "mmmkay";
+    }
+}
+(0, _tsDecorateMjsDefault.default)([
+    (0, _src.tryCatch)({
+        defaultValueOnError: new (0, _src.Result)(false)
+    })
+], Example.prototype, "someMethod", null);
+const instance = new Example();
+console.log("This should fail", instance.someMethod());
+instance.anotherMethod();
 
 },{"@swc/helpers/src/_ts_decorate.mjs":"6yrWP","../../src/extensions/ArrayExtensions":"iAHJd","../../src/extensions/StringExtensions":"bZeFs","../../src":"gBgwL","@spfxappdev/logger":"cUCDD","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"6yrWP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2077,6 +2137,11 @@ parcelHelpers.export(exports, "isset", ()=>(0, _issetDefault.default));
 parcelHelpers.export(exports, "issetDeep", ()=>(0, _issetDeepDefault.default));
 parcelHelpers.export(exports, "toBoolean", ()=>(0, _toBooleanDefault.default));
 parcelHelpers.export(exports, "asyncFn", ()=>(0, _asyncFnDefault.default));
+parcelHelpers.export(exports, "AsyncResult", ()=>(0, _asyncFn.AsyncResult));
+parcelHelpers.export(exports, "PromiseFunc", ()=>(0, _asyncFn.PromiseFunc));
+parcelHelpers.export(exports, "asyncFnAsResult", ()=>(0, _asyncFnAsResultDefault.default));
+parcelHelpers.export(exports, "catchFn", ()=>(0, _catchFnDefault.default));
+parcelHelpers.export(exports, "CatchFunc", ()=>(0, _catchFn.CatchFunc));
 parcelHelpers.export(exports, "promiseQueue", ()=>(0, _promiseQueueDefault.default));
 parcelHelpers.export(exports, "PromiseQueue", ()=>(0, _promiseQueue.PromiseQueue));
 parcelHelpers.export(exports, "toParameterlessPromiseQueueFunc", ()=>(0, _promiseQueue.toParameterlessPromiseQueueFunc));
@@ -2118,6 +2183,10 @@ var _toBoolean = require("./toBoolean");
 var _toBooleanDefault = parcelHelpers.interopDefault(_toBoolean);
 var _asyncFn = require("./asyncFn");
 var _asyncFnDefault = parcelHelpers.interopDefault(_asyncFn);
+var _asyncFnAsResult = require("./asyncFnAsResult");
+var _asyncFnAsResultDefault = parcelHelpers.interopDefault(_asyncFnAsResult);
+var _catchFn = require("./catchFn");
+var _catchFnDefault = parcelHelpers.interopDefault(_catchFn);
 var _promiseQueue = require("./promiseQueue");
 var _promiseQueueDefault = parcelHelpers.interopDefault(_promiseQueue);
 var _isValidEmail = require("./isValidEmail");
@@ -2135,7 +2204,7 @@ var _removeAllParametersFromUrlDefault = parcelHelpers.interopDefault(_removeAll
 var _date = require("./date");
 parcelHelpers.exportAll(_date, exports);
 
-},{"./allAreNullOrEmpty":"jJKZA","./allAreSet":"b5HIJ","./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"jJKZA":[function(require,module,exports) {
+},{"./allAreNullOrEmpty":"jJKZA","./allAreSet":"b5HIJ","./arrayFrom":"azDo8","./copyToClipboard":"iDVER","./cssClasses":"MnVqS","./extend":"5b4AA","./getDeepOrDefault":"2lIcC","./getUrlParameter":"6pMEM","./isAnyNullOrEmpty":"5IMM8","./isAnySet":"dFRtV","./isFunction":"keJuF","./isNullOrEmpty":"aPoSF","./isset":"eqi1m","./issetDeep":"ccx7w","./toBoolean":"4PZ4R","./asyncFn":"l1HTW","./asyncFnAsResult":"1Bnif","./catchFn":"4kX89","./promiseQueue":"fxMVR","./isValidEmail":"ba3pA","./randomString":"e1OV8","./replaceNonAlphanumeric":"awiEa","./stripHTML":"NiQyh","./replaceTpl":"cfEEI","./removeAllParametersFromUrl":"gxbB2","./date":"bMi6P","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"jJKZA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _isNullOrEmpty = require("./isNullOrEmpty");
@@ -2158,7 +2227,7 @@ var _issetDefault = parcelHelpers.interopDefault(_isset);
 function isNullOrEmpty(property) {
     if (!(0, _issetDefault.default)(property)) return true;
     if (typeof property === "string") return property.trim().length < 1;
-    if (!property.hasOwnProperty("length")) return false;
+    if (typeof property.length !== "number") return false;
     return property.length < 1;
 }
 exports.default = isNullOrEmpty;
@@ -2456,7 +2525,306 @@ async function asyncFn(promiseFn, ...promiseFnArgs) {
 }
 exports.default = asyncFn;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"fxMVR":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"1Bnif":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _classes = require("../classes");
+var _asyncFn = require("./asyncFn");
+var _asyncFnDefault = parcelHelpers.interopDefault(_asyncFn);
+var _isNullOrEmpty = require("./isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+async function asyncFnAsResult(promiseFn, thisArg, ...promiseFnArgs) {
+    const result = new (0, _classes.Result)();
+    const bindThis = !(0, _isNullOrEmptyDefault.default)(thisArg) && typeof thisArg === "object";
+    const [asyncResult, error] = await (0, _asyncFnDefault.default)(bindThis ? promiseFn.bind(thisArg) : promiseFn, ...promiseFnArgs);
+    if (error) result.error = error;
+    else result.value = asyncResult;
+    return result;
+}
+exports.default = asyncFnAsResult;
+
+},{"../classes":"lvbA5","./asyncFn":"l1HTW","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"lvbA5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _uri = require("./Uri");
+parcelHelpers.exportAll(_uri, exports);
+var _result = require("./Result");
+parcelHelpers.exportAll(_result, exports);
+
+},{"./Uri":"7U7JZ","./Result":"uZAxM","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"7U7JZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+/**
+ * A class for URL Parameters
+ * @since 1.2.0
+ */ parcelHelpers.export(exports, "UrlParameter", ()=>UrlParameter);
+parcelHelpers.export(exports, "Uri", ()=>Uri);
+var _functions = require("../functions");
+var _arrayExtensions = require("../extensions/ArrayExtensions");
+var _stringExtensions = require("../extensions/StringExtensions");
+class UrlParameter {
+    constructor(query){
+        this.Query = query;
+        this.Parameters = this.buildParametersArray();
+    }
+    add(name, value, encode = true) {
+        this.remove(name);
+        if (encode) value = encodeURIComponent(value);
+        this.Parameters.push({
+            Key: name,
+            Value: value
+        });
+        this.buildQuery();
+    }
+    get(name, decode = true) {
+        const value = (0, _functions.getUrlParameter)(name, this.getQuery());
+        if (value && decode) return decodeURIComponent(value);
+        return value;
+    }
+    getAll() {
+        return this.Parameters;
+    }
+    remove(name) {
+        const existingParameterIndex = this.Parameters.IndexOf((p)=>p.Key.Equals(name, true));
+        if (existingParameterIndex < 0) return;
+        this.Parameters.splice(existingParameterIndex, 1);
+        this.buildQuery();
+    }
+    removeAll() {
+        this.Parameters = [];
+        this.buildQuery();
+    }
+    getQuery() {
+        this.buildQuery(false);
+        return this.Query;
+    }
+    toString() {
+        return this.getQuery();
+    }
+    buildParametersArray() {
+        const parameters = [];
+        this.Query.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value)=>{
+            parameters.push({
+                Key: key,
+                Value: value
+            });
+            return value;
+        });
+        return parameters;
+    }
+    buildQuery(fireOnChangeEvent = true) {
+        if ((0, _functions.isNullOrEmpty)(this.Parameters)) {
+            this.Query = "";
+            return;
+        }
+        const queryArray = [];
+        this.Parameters.forEach((param)=>{
+            queryArray.push(`${param.Key}=${param.Value}`);
+        });
+        const query = queryArray.join("&");
+        this.Query = "?" + query;
+        if (fireOnChangeEvent && typeof this.onQueryChanged === "function") this.onQueryChanged();
+    }
+}
+class Uri {
+    get hash() {
+        return (0, _functions.isNullOrEmpty)(this.Hash) ? "" : `#${this.Hash}`;
+    }
+    constructor(url){
+        this.OriginalUrl = url;
+        this.Hash = this.getHash(url);
+        if (!(0, _functions.isNullOrEmpty)(this.hash)) url = url.replace(this.hash, "");
+        this.createUrlContext(url);
+    }
+    toString() {
+        return this.Url.Contains(this.hash) ? this.Url : this.Url + this.hash;
+    }
+    Combine(urlToCombine) {
+        const absoluteUrl = this.makeAbsoluteUrl(urlToCombine);
+        this.createUrlContext(absoluteUrl);
+    }
+    createUrlContext(url) {
+        this.Url = url;
+        this.Host = this.getHost(url);
+        this.WebUrl = this.getWebUrl(url);
+        this.Path = this.getPath(url);
+        this.Query = this.getQuery(url);
+        this.Protocol = this.getProtocol(url);
+        this.Parameters = new UrlParameter(this.Query);
+        const self = this;
+        this.Parameters.onQueryChanged = ()=>{
+            self.onParameterQueryChanged();
+        };
+    }
+    onParameterQueryChanged() {
+        // this.Query = this.Parameters.toString();
+        const newUrl = (0, _functions.removeAllParametersFromUrl)(this.Url) + this.Parameters.toString();
+        this.createUrlContext(newUrl);
+    }
+    makeAbsoluteUrl(urlToCombine) {
+        if (urlToCombine.StartsWith("http://") || urlToCombine.StartsWith("https://")) return urlToCombine;
+        if (urlToCombine.StartsWith("?") || urlToCombine.StartsWith("&")) {
+            const params = new UrlParameter(urlToCombine);
+            params.getAll().forEach((param)=>{
+                this.Parameters.add(param.Key, param.Value);
+            });
+            return this.toString();
+        }
+        let absoluteUrl = this.WebUrl;
+        const relativeUrl = this.Path;
+        if (absoluteUrl.EndsWith("/")) absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
+        if (relativeUrl.length > 0 && urlToCombine.StartsWith(relativeUrl)) urlToCombine = urlToCombine.substr(urlToCombine.IndexOf(relativeUrl) + urlToCombine.length);
+        if (urlToCombine.StartsWith("/")) urlToCombine = urlToCombine.substr(1);
+        const url = absoluteUrl + "/" + urlToCombine + this.Parameters.toString();
+        return url;
+    }
+    getSplittedUrl(url) {
+        if (this.SplittedUrl) return this.SplittedUrl;
+        this.SplittedUrl = url.split("/");
+        return this.SplittedUrl;
+    }
+    getWebUrl(url) {
+        url = (0, _functions.removeAllParametersFromUrl)(url);
+        return url;
+    }
+    getProtocol(url) {
+        const pathArray = this.getSplittedUrl(url);
+        return pathArray[0];
+    }
+    getHost(url) {
+        const pathArray = this.getSplittedUrl(url);
+        return pathArray[2];
+    }
+    getHostWithProtocol(url) {
+        const protocol = this.getProtocol(url);
+        const host = this.getHost(url);
+        return `${protocol}//${host}`;
+    }
+    getPath(url) {
+        const webUrl = this.getWebUrl(url);
+        const hostWithProtocol = this.getHostWithProtocol(url);
+        return webUrl.replace(hostWithProtocol, "");
+    }
+    getQuery(url) {
+        const webUrl = this.getWebUrl(url);
+        return url.replace(webUrl, "");
+    }
+    getHash(url) {
+        let urlCopy = url.slice();
+        let hashValue = "";
+        if (!urlCopy.Contains("#")) return hashValue;
+        let splittedUrl = urlCopy.split("#");
+        hashValue = splittedUrl.LastOrDefault();
+        if (!urlCopy.EndsWith("#" + hashValue) || hashValue.Contains("?")) hashValue = "";
+        return hashValue;
+    }
+}
+
+},{"../functions":"fZyL3","../extensions/ArrayExtensions":"iAHJd","../extensions/StringExtensions":"bZeFs","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bZeFs":[function(require,module,exports) {
+/* tslint:disable:interface-name */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+String.prototype.StartsWith = function(searchTerm, ignoreCase = true) {
+    let searchIn = this;
+    if (ignoreCase) {
+        searchTerm = searchTerm.toLocaleLowerCase();
+        searchIn = searchIn.toLocaleLowerCase();
+    }
+    return searchIn.indexOf(searchTerm) === 0;
+};
+String.prototype.EndsWith = function(searchTerm, ignoreCase = true) {
+    let searchIn = this;
+    if (searchTerm.length > searchIn.length) return false;
+    if (ignoreCase) {
+        searchTerm = searchTerm.toLocaleLowerCase();
+        searchIn = searchIn.toLocaleLowerCase();
+    }
+    const position = searchIn.length - searchTerm.length;
+    const lastIndex = searchIn.indexOf(searchTerm, position);
+    return lastIndex !== -1 && lastIndex === position;
+};
+String.prototype.Contains = function(searchTerm, ignoreCase = true) {
+    let searchIn = this;
+    if (ignoreCase) {
+        searchTerm = searchTerm.toLocaleLowerCase();
+        searchIn = searchIn.toLocaleLowerCase();
+    }
+    return searchIn.indexOf(searchTerm) >= 0;
+};
+String.prototype.IndexOf = function(searchTerm, ignoreCase = true) {
+    let searchIn = this;
+    if (ignoreCase) {
+        searchTerm = searchTerm.toLocaleLowerCase();
+        searchIn = searchIn.toLocaleLowerCase();
+    }
+    return searchIn.indexOf(searchTerm);
+};
+String.prototype.Insert = function(startIndex, valueToInsert) {
+    const text = this;
+    const first = text.substring(0, startIndex);
+    const second = text.substring(startIndex, text.length);
+    return first + valueToInsert + second;
+};
+String.prototype.Equals = function(value, ignoreCase = true) {
+    let s = this.slice(0);
+    if (ignoreCase) {
+        s = s.toLocaleLowerCase();
+        value = value.toLocaleLowerCase();
+    }
+    return value === s;
+};
+String.prototype.IsEmpty = function() {
+    const s = this;
+    return s.length < 1 || s.trim().length < 1;
+};
+String.prototype.ReplaceAll = function(searchTerm, replaceWith) {
+    let s = this.slice();
+    if (typeof this.replaceAll == "function") return this.replaceAll(searchTerm, replaceWith);
+    return s.replace(new RegExp(searchTerm, "g"), replaceWith);
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"uZAxM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Result", ()=>Result);
+var _functions = require("../functions");
+class Result {
+    _error = null;
+    get error() {
+        return this._error;
+    }
+    set error(val) {
+        this._error = val;
+        this.success = false;
+        if (!(0, _functions.isset)(this.originalError)) this.originalError = val;
+    }
+    originalError = null;
+    value = null;
+    constructor(success = true){
+        this.success = success;
+    }
+}
+
+},{"../functions":"fZyL3","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"4kX89":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _result = require("../classes/Result");
+var _isNullOrEmpty = require("./isNullOrEmpty");
+var _isNullOrEmptyDefault = parcelHelpers.interopDefault(_isNullOrEmpty);
+function catchFn(fnToCatch, thisArg, ...fnArgs) {
+    const result = new (0, _result.Result)();
+    try {
+        if (!(0, _isNullOrEmptyDefault.default)(thisArg) && typeof thisArg === "object") result.value = fnToCatch.apply(thisArg, [
+            ...fnArgs
+        ]);
+        else result.value = fnToCatch(...fnArgs);
+    } catch (error) {
+        result.error = error;
+    }
+    return result;
+}
+exports.default = catchFn;
+
+},{"../classes/Result":"uZAxM","./isNullOrEmpty":"aPoSF","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"fxMVR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "toParameterlessPromiseQueueFunc", ()=>toParameterlessPromiseQueueFunc);
@@ -2616,69 +2984,7 @@ function removeAllParametersFromUrl(url) {
 }
 exports.default = removeAllParametersFromUrl;
 
-},{"../extensions/StringExtensions":"bZeFs","../extensions/ArrayExtensions":"iAHJd","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bZeFs":[function(require,module,exports) {
-/* tslint:disable:interface-name */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-String.prototype.StartsWith = function(searchTerm, ignoreCase = true) {
-    let searchIn = this;
-    if (ignoreCase) {
-        searchTerm = searchTerm.toLocaleLowerCase();
-        searchIn = searchIn.toLocaleLowerCase();
-    }
-    return searchIn.indexOf(searchTerm) === 0;
-};
-String.prototype.EndsWith = function(searchTerm, ignoreCase = true) {
-    let searchIn = this;
-    if (searchTerm.length > searchIn.length) return false;
-    if (ignoreCase) {
-        searchTerm = searchTerm.toLocaleLowerCase();
-        searchIn = searchIn.toLocaleLowerCase();
-    }
-    const position = searchIn.length - searchTerm.length;
-    const lastIndex = searchIn.indexOf(searchTerm, position);
-    return lastIndex !== -1 && lastIndex === position;
-};
-String.prototype.Contains = function(searchTerm, ignoreCase = true) {
-    let searchIn = this;
-    if (ignoreCase) {
-        searchTerm = searchTerm.toLocaleLowerCase();
-        searchIn = searchIn.toLocaleLowerCase();
-    }
-    return searchIn.indexOf(searchTerm) >= 0;
-};
-String.prototype.IndexOf = function(searchTerm, ignoreCase = true) {
-    let searchIn = this;
-    if (ignoreCase) {
-        searchTerm = searchTerm.toLocaleLowerCase();
-        searchIn = searchIn.toLocaleLowerCase();
-    }
-    return searchIn.indexOf(searchTerm);
-};
-String.prototype.Insert = function(startIndex, valueToInsert) {
-    const text = this;
-    const first = text.substring(0, startIndex);
-    const second = text.substring(startIndex, text.length);
-    return first + valueToInsert + second;
-};
-String.prototype.Equals = function(value, ignoreCase = true) {
-    let s = this.slice(0);
-    if (ignoreCase) {
-        s = s.toLocaleLowerCase();
-        value = value.toLocaleLowerCase();
-    }
-    return value === s;
-};
-String.prototype.IsEmpty = function() {
-    const s = this;
-    return s.length < 1 || s.trim().length < 1;
-};
-String.prototype.ReplaceAll = function(searchTerm, replaceWith) {
-    let s = this.slice();
-    if (typeof this.replaceAll == "function") return this.replaceAll(searchTerm, replaceWith);
-    return s.replace(new RegExp(searchTerm, "g"), replaceWith);
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bMi6P":[function(require,module,exports) {
+},{"../extensions/StringExtensions":"bZeFs","../extensions/ArrayExtensions":"iAHJd","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"bMi6P":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "countWorkdays", ()=>(0, _countWorkdaysDefault.default));
@@ -2906,180 +3212,10 @@ var _classes = require("./classes");
 parcelHelpers.exportAll(_classes, exports);
 var _events = require("./events");
 parcelHelpers.exportAll(_events, exports);
+var _decorators = require("./decorators");
+parcelHelpers.exportAll(_decorators, exports);
 
-},{"./functions":"fZyL3","./classes":"lvbA5","./events":"5vG8m","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"lvbA5":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _uri = require("./Uri");
-parcelHelpers.exportAll(_uri, exports);
-
-},{"./Uri":"7U7JZ","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"7U7JZ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "UrlParameter", ()=>UrlParameter);
-parcelHelpers.export(exports, "Uri", ()=>Uri);
-var _functions = require("../functions");
-var _arrayExtensions = require("../extensions/ArrayExtensions");
-var _stringExtensions = require("../extensions/StringExtensions");
-class UrlParameter {
-    constructor(query){
-        this.Query = query;
-        this.Parameters = this.buildParametersArray();
-    }
-    add(name, value, encode = true) {
-        this.remove(name);
-        if (encode) value = encodeURIComponent(value);
-        this.Parameters.push({
-            Key: name,
-            Value: value
-        });
-        this.buildQuery();
-    }
-    get(name, decode = true) {
-        const value = (0, _functions.getUrlParameter)(name, this.getQuery());
-        if (value && decode) return decodeURIComponent(value);
-        return value;
-    }
-    getAll() {
-        return this.Parameters;
-    }
-    remove(name) {
-        const existingParameterIndex = this.Parameters.IndexOf((p)=>p.Key.Equals(name, true));
-        if (existingParameterIndex < 0) return;
-        this.Parameters.splice(existingParameterIndex, 1);
-        this.buildQuery();
-    }
-    removeAll() {
-        this.Parameters = [];
-        this.buildQuery();
-    }
-    getQuery() {
-        this.buildQuery(false);
-        return this.Query;
-    }
-    toString() {
-        return this.getQuery();
-    }
-    buildParametersArray() {
-        const parameters = [];
-        this.Query.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value)=>{
-            parameters.push({
-                Key: key,
-                Value: value
-            });
-            return value;
-        });
-        return parameters;
-    }
-    buildQuery(fireOnChangeEvent = true) {
-        if ((0, _functions.isNullOrEmpty)(this.Parameters)) {
-            this.Query = "";
-            return;
-        }
-        const queryArray = [];
-        this.Parameters.forEach((param)=>{
-            queryArray.push(`${param.Key}=${param.Value}`);
-        });
-        const query = queryArray.join("&");
-        this.Query = "?" + query;
-        if (fireOnChangeEvent && typeof this.onQueryChanged === "function") this.onQueryChanged();
-    }
-}
-class Uri {
-    get hash() {
-        return (0, _functions.isNullOrEmpty)(this.Hash) ? "" : `#${this.Hash}`;
-    }
-    constructor(url){
-        this.OriginalUrl = url;
-        this.Hash = this.getHash(url);
-        if (!(0, _functions.isNullOrEmpty)(this.hash)) url = url.replace(this.hash, "");
-        this.createUrlContext(url);
-    }
-    toString() {
-        return this.Url.Contains(this.hash) ? this.Url : this.Url + this.hash;
-    }
-    Combine(urlToCombine) {
-        const absoluteUrl = this.makeAbsoluteUrl(urlToCombine);
-        this.createUrlContext(absoluteUrl);
-    }
-    createUrlContext(url) {
-        this.Url = url;
-        this.Host = this.getHost(url);
-        this.WebUrl = this.getWebUrl(url);
-        this.Path = this.getPath(url);
-        this.Query = this.getQuery(url);
-        this.Protocol = this.getProtocol(url);
-        this.Parameters = new UrlParameter(this.Query);
-        const self = this;
-        this.Parameters.onQueryChanged = ()=>{
-            self.onParameterQueryChanged();
-        };
-    }
-    onParameterQueryChanged() {
-        // this.Query = this.Parameters.toString();
-        const newUrl = (0, _functions.removeAllParametersFromUrl)(this.Url) + this.Parameters.toString();
-        this.createUrlContext(newUrl);
-    }
-    makeAbsoluteUrl(urlToCombine) {
-        if (urlToCombine.StartsWith("http://") || urlToCombine.StartsWith("https://")) return urlToCombine;
-        if (urlToCombine.StartsWith("?") || urlToCombine.StartsWith("&")) {
-            const params = new UrlParameter(urlToCombine);
-            params.getAll().forEach((param)=>{
-                this.Parameters.add(param.Key, param.Value);
-            });
-            return this.toString();
-        }
-        let absoluteUrl = this.WebUrl;
-        const relativeUrl = this.Path;
-        if (absoluteUrl.EndsWith("/")) absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
-        if (relativeUrl.length > 0 && urlToCombine.StartsWith(relativeUrl)) urlToCombine = urlToCombine.substr(urlToCombine.IndexOf(relativeUrl) + urlToCombine.length);
-        if (urlToCombine.StartsWith("/")) urlToCombine = urlToCombine.substr(1);
-        const url = absoluteUrl + "/" + urlToCombine + this.Parameters.toString();
-        return url;
-    }
-    getSplittedUrl(url) {
-        if (this.SplittedUrl) return this.SplittedUrl;
-        this.SplittedUrl = url.split("/");
-        return this.SplittedUrl;
-    }
-    getWebUrl(url) {
-        url = (0, _functions.removeAllParametersFromUrl)(url);
-        return url;
-    }
-    getProtocol(url) {
-        const pathArray = this.getSplittedUrl(url);
-        return pathArray[0];
-    }
-    getHost(url) {
-        const pathArray = this.getSplittedUrl(url);
-        return pathArray[2];
-    }
-    getHostWithProtocol(url) {
-        const protocol = this.getProtocol(url);
-        const host = this.getHost(url);
-        return `${protocol}//${host}`;
-    }
-    getPath(url) {
-        const webUrl = this.getWebUrl(url);
-        const hostWithProtocol = this.getHostWithProtocol(url);
-        return webUrl.replace(hostWithProtocol, "");
-    }
-    getQuery(url) {
-        const webUrl = this.getWebUrl(url);
-        return url.replace(webUrl, "");
-    }
-    getHash(url) {
-        let urlCopy = url.slice();
-        let hashValue = "";
-        if (!urlCopy.Contains("#")) return hashValue;
-        let splittedUrl = urlCopy.split("#");
-        hashValue = splittedUrl.LastOrDefault();
-        if (!urlCopy.EndsWith("#" + hashValue) || hashValue.Contains("?")) hashValue = "";
-        return hashValue;
-    }
-}
-
-},{"../functions":"fZyL3","../extensions/ArrayExtensions":"iAHJd","../extensions/StringExtensions":"bZeFs","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5vG8m":[function(require,module,exports) {
+},{"./functions":"fZyL3","./classes":"lvbA5","./events":"5vG8m","./decorators":"81MG9","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"5vG8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventHandler", ()=>(0, _eventHandler.EventHandler));
@@ -3148,6 +3284,47 @@ class EventListenerBase {
         throw new Error("Method not implemented.");
     }
 }
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"81MG9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "tryCatch", ()=>(0, _tryCatch.tryCatch));
+var _tryCatch = require("./tryCatch");
+
+},{"./tryCatch":"i998v","@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"i998v":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "tryCatch", ()=>tryCatch);
+const tryCatch = (options)=>{
+    const defaultOptions = {
+        defaultValueOnError: null
+    };
+    options = {
+        ...defaultOptions,
+        ...options
+    };
+    return (target, propertyKey, descriptor)=>{
+        const originalMethod = descriptor.value;
+        descriptor.value = function() {
+            try {
+                const result = originalMethod.apply(this, arguments);
+                if (!(result instanceof Promise)) return result;
+                return new Promise((resolve)=>{
+                    result.then((value)=>{
+                        return resolve(value);
+                    }).catch((error)=>{
+                        console.error(`Error caught in method "${propertyKey}":`, error);
+                        return resolve(options.defaultValueOnError);
+                    });
+                });
+            } catch (error) {
+                console.error(`Error caught in method "${propertyKey}":`, error);
+                return options.defaultValueOnError;
+            }
+        };
+        return descriptor;
+    };
+};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"hMyTC"}],"cUCDD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
