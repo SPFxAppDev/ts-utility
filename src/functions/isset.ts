@@ -4,6 +4,6 @@
  * @returns {boolean} If the Property is set <c>true</c> otherwise <c>false</c>.
  * @since 1.0.0
  */
-export default function isset(property: any): boolean {
-    return typeof property !== 'undefined' && property != null;
+export default function isset<T>(property: T): property is T {
+  return typeof property !== 'undefined' && property != null;
 }

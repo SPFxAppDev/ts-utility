@@ -1,1 +1,1 @@
-export { tryCatch } from './tryCatch';
+export { tryCatch, DefaultValueOnErrorFunction } from './tryCatch';

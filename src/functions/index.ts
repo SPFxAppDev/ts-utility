@@ -23,4 +23,9 @@ export { default as replaceNonAlphanumeric } from './replaceNonAlphanumeric';
 export { default as stripHTML } from './stripHTML';
 export { default as replaceTpl } from './replaceTpl';
 export { default as removeAllParametersFromUrl } from './removeAllParametersFromUrl';
+export { default as simpleClone } from './simpleClone';
+export { default as hexToRgb, RGBA } from './hexToRgb';
+export { default as rgbToHex } from './rgbToHex';
+export { default as removeTrailingSlashes } from './removeTrailingSlashes';
+
 export * from './date';

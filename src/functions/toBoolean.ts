@@ -17,7 +17,7 @@ export default function toBoolean(value: any): boolean {
     }
 
     if (typeof value === 'string') {
-        value = value.toLowerCase();
+        value = (value as string).toLowerCase();
     }
 
     if ((value !== 'false' && value !== 'true') &&

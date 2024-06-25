@@ -27,7 +27,7 @@ import isset from "./isset";
         }
 
         if (isFunction(placeholderValue)) {
-          return placeholderValue.apply(placeholderData, null);
+          return (placeholderValue as Function).apply(placeholderData, null);
         }
 
         return placeholderValue;
