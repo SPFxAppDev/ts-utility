@@ -1,8 +1,38 @@
 export interface RGBA {
+  /**
+   * The red color value (0-255)
+   * @type {number}
+   * @memberof RGBA
+   */
   r: number;
+
+  /**
+   * The green color value (0-255)
+   * @type {number}
+   * @memberof RGBA
+   */
   g: number;
+
+  /**
+   * The blue color value (0-255)
+   * @type {number}
+   * @memberof RGBA
+   */
   b: number;
+
+  /**
+   * The alpha (transparent) value (0-1)
+   * @type {number}
+   * @memberof RGBA
+   */
   a?: number;
+
+  /**
+   *
+   *
+   * @return {string} A string in css format rgb(0,0,0) or rgba(0,0,0,1)
+   * @memberof RGBA
+   */
   toString(): string;
 }
 
@@ -29,8 +59,10 @@ class RGBa implements RGBA {
  *
  * @example
  * ```typescript
- * hexToRgb("#ff0000");        // returns { r: 255, g: 0, b: 0 }
- * hexToRgb("#00ff007f");      // returns { r: 0, g: 255, b: 0, a: 0.5 }
+ * hexToRgb("#ff0000");               // returns { r: 255, g: 0, b: 0 }
+ * hexToRgb("#ff0000").toString();    // returns 'rgb(255,0,0)'
+ * hexToRgb("#00ff007f");             // returns { r: 0, g: 255, b: 0, a: 0.5 }
+ * hexToRgb("#00ff007f").toString();  // returns 'rgba(0, 255, 0, 0.5'
  * ```
  * @since 1.5.0
  */

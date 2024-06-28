@@ -17,6 +17,7 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [formatDate](#formatdate)
   * [getDeepOrDefault](#getdeepordefault)
   * [getUrlParameter](#geturlparameter)
+  * [hexToRgb](#hextorgb)
   * [isAnyNullOrEmpty](#isanynullorempty)
   * [isAnySet](#isanyset)
   * [isFunction](#isfunction)
@@ -29,8 +30,11 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [promiseQueue](#promisequeue)
   * [randomString](#randomstring)
   * [removeAllParametersFromUrl](#removeallparametersfromurl)
+  * [removeTrailingSlashes](#removetrailingslashes)
   * [replaceNonAlphanumeric](#replacenonalphanumeric)
   * [replaceTpl](#replacetpl)
+  * [rgbToHex](#rgbtohex)
+  * [simpleClone](#simpleClone)
   * [stripHTML](#striphtml)
   * [toBoolean](#toboolean)
   * [weekNumber](#weeknumber)
@@ -91,6 +95,7 @@ import { isset } from '@spfxappdev/utility';
 - [formatDate](#formatdate)
 - [getDeepOrDefault](#getdeepordefault)
 - [getUrlParameter](#geturlparameter)
+- [hexToRgb](#hextorgb)
 - [isAnyNullOrEmpty](#isanynullorempty)
 - [isAnySet](#isanyset)
 - [isFunction](#isfunction)
@@ -103,8 +108,11 @@ import { isset } from '@spfxappdev/utility';
 - [promiseQueue](#promisequeue)
 - [randomString](#randomstring)
 - [removeAllParametersFromUrl](#removeallparametersfromurl)
+- [removeTrailingSlashes](#removetrailingslashes)
 - [replaceNonAlphanumeric](#replacenonalphanumeric)
 - [replaceTpl](#replacetpl)
+- [rgbToHex](#rgbtohex)
+- [simpleClone](#simpleClone)
 - [stripHTML](#striphtml)
 - [toBoolean](#toboolean)
 - [weekNumber](#weeknumber)
@@ -401,6 +409,24 @@ getUrlParameter('myParam2');  // => Using window.location.href as URL
 ```
 ___
 
+#### hexToRgb
+
+![since @spfxappdev/utility@1.5.0](https://img.shields.io/badge/since-v1.5.0-violet)
+
+Converts a HEX color string to an RGB or RGBA object.
+
+##### Examples
+
+```typescript
+import { hexToRgb } from '@spfxappdev/utility';
+
+hexToRgb("#ff0000");              // returns { r: 255, g: 0, b: 0 }
+hexToRgb("#ff0000").toString();   // returns 'rgb(255,0,0)'
+hexToRgb("#00ff007f");            // returns { r: 0, g: 255, b: 0, a: 0.5 }
+hexToRgb("#00ff007f").toString(); // returns 'rgba(0, 255, 0, 0.5'
+```
+___
+
 #### isAnyNullOrEmpty
 
 ![since @spfxappdev/utility@1.3.0](https://img.shields.io/badge/since-v1.3.0-purple)
@@ -626,6 +652,25 @@ removeAllParametersFromUrl("https://spfx-app.dev/#/routedpath"); // ==> https://
 ```
 ___
 
+#### removeTrailingSlashes
+
+![since @spfxappdev/utility@1.5.0](https://img.shields.io/badge/since-v1.5.0-violet)
+
+Removes trailing slashes from a given string.
+
+##### Examples
+
+```typescript
+import { removeTrailingSlashes } from '@spfxappdev/utility';
+
+removeEndingSlashes("example/");          // returns "example"
+removeEndingSlashes("example//");         // returns "example"
+removeEndingSlashes("example/path/");     // returns "example/path"
+removeEndingSlashes("/example/path///");  // returns "/example/path"
+removeEndingSlashes(123 as any);          // returns ""
+```
+___
+
 #### replaceNonAlphanumeric
 
 ![since @spfxappdev/utility@1.1.0](https://img.shields.io/badge/since-v1.1.0-green)
@@ -660,6 +705,39 @@ replaceTpl("Hello {User.FirstName} {User.LastName}, last login: {User.LastLogin}
 
 replaceTpl("Hello {404}", { User: { FirstName: "SPFxApp", LastName: "Dev" } }, "");
 // Result: Hello 
+```
+___
+
+#### rgbToHex
+
+![since @spfxappdev/utility@1.5.0](https://img.shields.io/badge/since-v1.5.0-violet)
+
+Converts RGB or RGBA color values to a HEX color string.
+
+##### Examples
+
+```typescript
+import { rgbToHex } from '@spfxappdev/utility';
+
+rgbToHex(255, 0, 0);               // returns "#ff0000"
+rgbToHex(255, 0, 0, false);        // returns "ff0000"
+rgbToHex(0, 255, 0, 0.5);          // returns "#00ff007f"
+rgbToHex(0, 255, 0, 0.5, false);   // returns "00ff007f"
+```
+___
+
+#### simpleClone
+
+![since @spfxappdev/utility@1.5.0](https://img.shields.io/badge/since-v1.5.0-violet)
+
+Creates a simple (deep) clone of `value`
+
+##### Examples
+
+```typescript
+import { simpleClone } from '@spfxappdev/utility';
+
+simpleClone({a: "abc"});               // returns {a: "abc"}
 ```
 ___
 

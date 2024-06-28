@@ -6,6 +6,13 @@
  * @param {number} a - Optional. The alpha value (0-1). If provided, the resulting HEX string will include the alpha channel.
  * @param {boolean} withHashPrefix - Optional. If <c>true</c>, the # (hash) prefix is added to the return value, otherwise not. Default value is true.
  * @return {string}  A string representing the HEX color value. If the alpha value is provided, the string will include the alpha channel.
+ * @example
+ * ```typescript
+ * rgbToHex(255, 0, 0);               // returns "#ff0000"
+ * rgbToHex(255, 0, 0, false);        // returns "ff0000"
+ * rgbToHex(0, 255, 0, 0.5);          // returns "#00ff007f"
+ * rgbToHex(0, 255, 0, 0.5, false);   // returns "00ff007f"
+ * ```
  * @since 1.5.0
  */
 export default function rgbToHex(
