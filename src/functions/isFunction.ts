@@ -1,11 +1,11 @@
 import isset from './isset';
 
 /**
- * Determines wheter the Property is a Function.
+ * Determines whether the property is a function.
  * @param {any} property The Property to be determined.
- * @returns {boolean} Wheter the Property is a Function.
+ * @returns {boolean} whether the property is a function.
  * @since 1.0.0
  */
-export default function isFunction(property: any): boolean {
+export default function isFunction(property: any): property is Function {
     return isset(property) && typeof property === 'function';
 }

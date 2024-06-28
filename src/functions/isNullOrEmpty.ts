@@ -7,18 +7,18 @@ import isset from './isset';
  * not "length" as property <c>true</c> otherwise <c>false</c>.
  * @since 1.0.0
  */
-export default function isNullOrEmpty(property: any): boolean {
-    if (!isset(property)) {
-        return true;
-    }
+export default function isNullOrEmpty(property: any): property is null {
+  if (!isset(property)) {
+    return true;
+  }
 
-    if (typeof property === 'string') {
-        return property.trim().length < 1;
-    }
+  if (typeof property === 'string') {
+    return (property as string).trim().length < 1;
+  }
 
-    if (typeof property.length !== 'number') {
-        return false;
-    }
+  if (typeof (property as any).length !== 'number') {
+    return false;
+  }
 
-    return property.length < 1;
+  return (property as any).length < 1;
 }

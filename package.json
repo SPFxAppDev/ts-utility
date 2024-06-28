@@ -1,6 +1,6 @@
 {
   "name": "@spfxappdev/utility",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -28,5 +28,8 @@
   "homepage": "https://github.com/SPFxAppDev/ts-utility#readme",
   "devDependencies": {
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@spfxappdev/utility": "^1.4.1"
   }
 }

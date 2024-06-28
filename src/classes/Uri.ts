@@ -205,13 +205,14 @@ export class Uri implements IUrlContext {
             absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
         }
 
-        if (relativeUrl.length > 0 &&
-            urlToCombine.StartsWith(relativeUrl)) {
-            urlToCombine = urlToCombine.substr(urlToCombine.IndexOf(relativeUrl) + urlToCombine.length);
+        if (relativeUrl.length > 0 && urlToCombine.StartsWith(relativeUrl)) {
+          urlToCombine = urlToCombine.substring(
+            urlToCombine.IndexOf(relativeUrl) + relativeUrl.length
+          );
         }
 
         if (urlToCombine.StartsWith('/')) {
-            urlToCombine = urlToCombine.substr(1);
+          urlToCombine = urlToCombine.substring(1);
         }
 
         const url: string = absoluteUrl + '/' + urlToCombine + this.Parameters.toString();
