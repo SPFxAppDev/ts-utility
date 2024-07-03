@@ -7,7 +7,7 @@ import isset from './isset';
  * not "length" as property <c>true</c> otherwise <c>false</c>.
  * @since 1.0.0
  */
-export default function isNullOrEmpty(property: any): property is null {
+export default function isNullOrEmpty(property: any): property is null | undefined {
   if (!isset(property)) {
     return true;
   }
