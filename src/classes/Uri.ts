@@ -98,6 +98,11 @@ export class UrlParameter {
     private buildQuery(fireOnChangeEvent: boolean = true): void {
         if (isNullOrEmpty(this.Parameters)) {
             this.Query = '';
+
+            if (fireOnChangeEvent && typeof this.onQueryChanged === 'function') {
+              this.onQueryChanged();
+            }
+
             return;
         }
 
