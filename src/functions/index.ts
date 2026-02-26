@@ -16,7 +16,11 @@ export { default as toBoolean } from './toBoolean';
 export { default as asyncFn, AsyncResult, PromiseFunc } from './asyncFn';
 export { default as asyncFnAsResult } from './asyncFnAsResult';
 export { default as catchFn, CatchFunc } from './catchFn';
-export { default as promiseQueue, PromiseQueue, toParameterlessPromiseQueueFunc } from './promiseQueue';
+export {
+  default as promiseQueue,
+  PromiseQueue,
+  toParameterlessPromiseQueueFunc,
+} from './promiseQueue';
 export { default as isValidEmail } from './isValidEmail';
 export { default as randomString } from './randomString';
 export { default as replaceNonAlphanumeric } from './replaceNonAlphanumeric';
@@ -27,5 +31,5 @@ export { default as simpleClone } from './simpleClone';
 export { default as hexToRgb, RGBA } from './hexToRgb';
 export { default as rgbToHex } from './rgbToHex';
 export { default as removeTrailingSlashes } from './removeTrailingSlashes';
-
+export * from './dummyPromise';
 export * from './date';
