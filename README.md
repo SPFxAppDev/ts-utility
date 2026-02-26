@@ -12,6 +12,7 @@ This package contains some useful extensions for `String` and `Array` and some m
   * [copyToClipboard](#copytoclipboard)
   * [countWorkdays](#countworkdays)
   * [cssClasses](#cssclasses)
+  * [dummyPromise](#dummypromise)
   * [firstDayOfMonth](#firstdayofmonth)
   * [firstDayOfWeek](#firstdayofweek)
   * [formatDate](#formatdate)
@@ -346,6 +347,33 @@ cssClasses({ spfx-app-dev: true, theme: true });  // => 'spfx-app-dev theme'
 cssClasses('spfx-app-dev', { theme: true, active: false }, 'item');  // => 'spfx-app-dev theme item'
 cssClasses(null, false, 'spfx-app-dev', undefined, 0, 1, { theme: null }, '');  // => 'spfx-app-dev'
 const arr = ['theme', { active: true, item: false }]; cssClasses('spfx-app-dev', arr);  // => 'spfx-app-dev theme active'
+```
+___
+
+#### dummyPromise
+
+![since @spfxappdev/utility@1.5.4](https://img.shields.io/badge/since-v1.6.0-cyan)
+
+A utility function to **simulate asynchronous operations**. Perfect for mocking API calls in tests or UI development. It supports custom delays, success/failure toggling, and generic return/error values.
+
+##### Examples
+
+```typescript
+import { dummyPromise } from '@spfxappdev/utility';
+
+// Default: Waits 3s and resolves
+await dummyPromise();
+
+// Custom data and faster (100ms) response
+const user = await dummyPromise(100, true, { id: 1, name: "John" });
+//user is { id: 1, name: 'John' };
+  
+// Simulating a specific API Error
+try {
+  await dummyPromise(500, false, null, { status: 404, message: "Not Found" });
+} catch (error) {
+  console.error(error.status); // 404
+}
 ```
 ___
 
